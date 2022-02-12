@@ -1,20 +1,39 @@
 <template>
   <div id="nav">
+    <h1>hello drinker</h1>
+    <h3>{{ greeting }}</h3>
     <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/about">About</router-link> |
+    <router-link to="/register">Register</router-link>
   </div>
-  <router-view/>
+  <div class="buttons">
+    <button @click="getIndex">index</button>
+  </div>
+  <router-view />
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import axios from 'axios';
+import { ref } from 'vue';
 
+export default {
+  name: 'index',
+  setup() {
+    let greeting = ref('hi');
+
+    const getIndex = () => {
+      axios.get('http://localhost:3000').then((data) => {
+        console.log('get index greeting message --->', data);
+        greeting.value = data.data;
+      });
+    };
+
+    return { greeting, getIndex };
+  },
+};
+</script>
+
+<style lang="scss">
 #nav {
   padding: 30px;
 

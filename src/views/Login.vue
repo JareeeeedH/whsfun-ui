@@ -1,10 +1,7 @@
 <template>
-  <h1>Register</h1>
+  <h1>Login</h1>
   <div class="form-wrapper">
     <div class="form">
-      <label for="name">name</label>
-      <input type="text" id="name" v-model="name" />
-
       <label for="email">email</label>
       <input type="text" id="email" v-model="email" />
 
@@ -28,26 +25,24 @@ import axios from 'axios';
 export default {
   name: 'register',
   setup() {
-    let name = ref('jarrrred');
     let email = ref('123@gmail.com');
     let password = ref('ji11');
 
     const submitRegister = () => {
-      const newDrinker = {
-        name: name.value,
+      const drinker = {
         email: email.value,
         password: password.value,
       };
-      console.log('submit Register');
+      console.log('Login page');
       axios
-        .post('http://localhost:3000/api/member/register', { newDrinker })
+        .post('http://localhost:3000/api/member/login', { drinker })
         .then((response) => {
           console.log(response);
         })
         .catch((err) => console.warn('error !!!!', err.response.data));
     };
 
-    return { name, email, password, submitRegister };
+    return { email, password, submitRegister };
   },
 };
 </script>

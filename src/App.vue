@@ -4,7 +4,10 @@
     <h3>{{ greeting }}</h3>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link> |
-    <router-link to="/register">Register</router-link>
+    <router-link to="/register">Register</router-link> |
+    <router-link to="/login">login</router-link> |
+    <router-link to="/post">post</router-link> |
+    <router-link to="/message">message</router-link>
   </div>
   <div class="buttons">
     <button @click="getIndex">index</button>

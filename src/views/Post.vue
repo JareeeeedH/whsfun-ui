@@ -19,6 +19,9 @@
       </button>
     </div>
   </div>
+  <div class="alert alert-danger" role="alert" v-show="errorMessage">
+    {{ errorMessage }}
+  </div>
 </template>
 
 <script>
@@ -32,6 +35,10 @@ export default {
     let message = ref('good, i like Peated !');
     let points = ref(86);
 
+    let token = "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjBhNzczMjIwYWQwMjdlZDdkYzkwNGIiLCJlbWFpbCI6IjIyMkBnbWFpbC5jb20iLCJuYW1lIjoiamFycnJyZWQiLCJpYXQiOjE2NDQ4NTM1Njh9.Su8iTaKLTgS6d6wtzTUYiPvn9svp-1LqrwgpjTOqR3s"
+    // let token = "JWT abcdTest"
+    let errorMessage = ref(null);
+
     const submitRegister = () => {
       const post = {
         title: title.value,
@@ -40,14 +47,29 @@ export default {
       };
 
       messageService
-        .post(post)
-        .then((response) => console.log('post OK --->', response))
-        .catch((err) =>
-          console.log('post Error --->', err.response.data.err.message)
-        );
+        .post(post,token)
+        .then((response) => {
+          console.log('post OK --->', response)
+        })
+        .catch((err) => {
+
+          // 目前我想到的兩種 error
+          // 如果err是DB驗證不通過
+          if(err.response.data.err){
+            let errorMsg = err.response.data.err.message
+            errorMessage.value = errorMsg
+            console.log(errorMsg)
+          }
+          // 或者是 token無效, 沒有授權
+          else{
+            let errorMsg = err.response.data
+            errorMessage.value = errorMsg
+            console.log(errorMsg)
+          }
+        });
     };
 
-    return { title, message, points, submitRegister };
+    return { title, message, points, errorMessage, submitRegister };
   },
 };
 </script>

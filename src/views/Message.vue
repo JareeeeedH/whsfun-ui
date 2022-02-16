@@ -1,25 +1,32 @@
 <template>
   <h1>Post from DB</h1>
   <div class="wrapper">
-    <div class="review" v-for="post in 3" :key="post">
-      <h3>title</h3>
+    <div class="review" v-for="post in allMessage" :key="post">
+      <h3>{{post.title}} | {{post.points}}</h3>
       <h5>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Commodi
-        voluptatibus quia sequi consectetur voluptatem atque sint pariatur
-        dolore quasi, rerum dolorem amet deleniti dolor aut!
+        {{post.content}} by: {{post.speaker.name}}
       </h5>
-      <h5>85</h5>
     </div>
   </div>
 </template>
 
 <script>
-// import { ref } from '@vue/reactivity';
-// import axios from 'axios';
+import { ref } from '@vue/reactivity';
+
+import messageService from '../api-service/message-service';
 
 export default {
   name: 'review',
-  setup() {},
+  setup() {
+    const allMessage = ref(null);
+    const token = "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjBiYmU1ZGY5MjUxMWYzZDE0YzE0NGEiLCJlbWFpbCI6IjExMUBnbWFpbC5jb20iLCJuYW1lIjoiamFyZWQiLCJpYXQiOjE2NDQ5MzY5MzR9.dTTeEexRmsn32A6Gf3XeUaqzFqvSLtsoVC4euUJogCU"
+    
+    messageService.get(token).then((foundData)=>{
+      allMessage.value = foundData.data.data;
+    })
+
+    return{ allMessage }
+  },
 };
 </script>
 

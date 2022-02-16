@@ -35,8 +35,16 @@ export default {
     let message = ref('good, i like Peated !');
     let points = ref(86);
 
-    let token = "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjBhNzczMjIwYWQwMjdlZDdkYzkwNGIiLCJlbWFpbCI6IjIyMkBnbWFpbC5jb20iLCJuYW1lIjoiamFycnJyZWQiLCJpYXQiOjE2NDQ4NTM1Njh9.Su8iTaKLTgS6d6wtzTUYiPvn9svp-1LqrwgpjTOqR3s"
+    let token1 = "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjBiYmU1ZGY5MjUxMWYzZDE0YzE0NGEiLCJlbWFpbCI6IjExMUBnbWFpbC5jb20iLCJuYW1lIjoiamFyZWQiLCJpYXQiOjE2NDQ5MzY5MzR9.dTTeEexRmsn32A6Gf3XeUaqzFqvSLtsoVC4euUJogCU"
+    // let token2 = "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjBiYmU5OGY5MjUxMWYzZDE0YzE0NGQiLCJlbWFpbCI6IjIyMkBnbWFpbC5jb20iLCJuYW1lIjoiTmVsc29uIiwiaWF0IjoxNjQ0OTM2OTc5fQ.evZwKgDi2ci-zRKXzOxmfppJ0oOwhhTZgiTDOmy1TVc"
+    // let token3 = "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjBiYmVjOGY5MjUxMWYzZDE0YzE0NTAiLCJlbWFpbCI6IjMzM0BnbWFpbC5jb20iLCJuYW1lIjoiUGV0ZXIiLCJpYXQiOjE2NDQ5MzcwMjh9.orFzNwesCmF1SCOHAykZcGnnw9_YnX_ZmPdp99qIFLw"
+    
     // let token = "JWT abcdTest"
+
+    let user1 = "620bbe5df92511f3d14c144a"
+    // let user2 = "620bbe98f92511f3d14c144d"
+    // let user3 = "620bbec8f92511f3d14c1450"
+
     let errorMessage = ref(null);
 
     const submitRegister = () => {
@@ -44,10 +52,11 @@ export default {
         title: title.value,
         content: message.value,
         points: points.value,
+        speaker: user1
       };
 
       messageService
-        .post(post,token)
+        .post(post,token1)
         .then((response) => {
           console.log('post OK --->', response)
         })

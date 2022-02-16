@@ -25,8 +25,8 @@ import axios from 'axios';
 export default {
   name: 'register',
   setup() {
-    let email = ref('123@gmail.com');
-    let password = ref('ji11');
+    let email = ref('@gmail.com');
+    let password = ref('');
 
     const submitRegister = () => {
       const drinker = {

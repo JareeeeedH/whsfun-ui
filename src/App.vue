@@ -1,6 +1,8 @@
 <template>
   <Navbar />
-  <router-view />
+  <div class="main-area">
+    <router-view />
+  </div>
 </template>
 
 <script>
@@ -12,20 +14,9 @@ export default {
 };
 </script>
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  text-decoration: none;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
-  padding: 0;
+<style lang="scss" scoped>
+.main-area {
+  max-width: 1240px;
+  margin: auto;
 }
 </style>

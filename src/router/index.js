@@ -5,6 +5,9 @@ import Login from '../views/Login.vue';
 import Post from '../views/Post';
 import Message from '../views/Message';
 
+// 主要的評論搜尋頁面
+import View from '../views/View';
+
 const routes = [
   {
     path: '/',
@@ -16,6 +19,11 @@ const routes = [
     name: 'About',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/About.vue'),
+  },
+  {
+    path: '/view',
+    name: 'view',
+    component: View,
   },
   {
     path: '/register',

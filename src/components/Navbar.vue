@@ -3,6 +3,7 @@
     <router-link @click="getIndex" class="nav-item" to="/">
       {{ home }}
     </router-link>
+    <router-link class="nav-item" to="/view">View</router-link>
     <router-link class="nav-item" to="/about">About</router-link>
     <router-link class="nav-item" to="/register">Register</router-link>
     <router-link class="nav-item" to="/login">login</router-link>
@@ -33,22 +34,42 @@ export default {
 </script>
 
 <style lang="scss">
+@import '@/style/main.scss';
+
 #nav {
   display: flex;
-  padding: 1rem;
-  border: 2px solid red;
+  padding: 1.25rem;
+  background-color: $dark-mode;
   :first-child {
     margin-right: auto;
   }
-  a {
+  .nav-item {
+    position: relative;
     font-weight: bold;
-    color: #121212;
+    color: $dark-mode;
     font-size: 1.25rem;
+    color: rgb(200, 200, 200);
     text-decoration: none;
     padding: 0 1rem;
 
+    &:hover::before {
+      background-color: $amber-color;
+      width: 85%;
+    }
+
+    &::before {
+      position: absolute;
+      display: block;
+      content: '';
+      bottom: -1px;
+      width: 5%;
+      height: 2px;
+      background-color: #fff;
+      transition: width 0.5s;
+    }
+
     &.router-link-exact-active {
-      color: red;
+      color: $amber-color;
     }
   }
 }

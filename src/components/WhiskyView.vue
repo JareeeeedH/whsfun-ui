@@ -2,7 +2,7 @@
   <div class="view-wrapper">
     <div class="view" v-for="view in viewList" :key="view.id">
       <div class="title-area">
-        <h3>{{ view.mainTitle }}</h3>
+        <h2>{{ view.mainTitle }}</h2>
         <h5>{{ view.subTitle }}</h5>
       </div>
       <div class="content-area">
@@ -12,7 +12,6 @@
           </div>
           <div class="point">
             <span> {{ view.SGP }}</span>
-            <br />
             <span>points:{{ view.points }}</span>
           </div>
         </div>
@@ -48,12 +47,14 @@ export default {
 .view {
   width: 100%;
   margin: 0.5rem 0;
-  padding: 0.25rem 1rem;
+  // padding: 0.25rem 1rem;
   border: 3px solid grey;
-  background-color: rgba(#ffbf00, 0.3);
+  // background-color: rgba(#ffbf00, 0.3);
   border-radius: 5px;
 
   .title-area {
+    padding: 0.75rem;
+    background-color: rgba(#ffbf00, 0.5);
     border-bottom: 2px solid black;
   }
   .content-area {
@@ -67,9 +68,23 @@ export default {
   }
   .img {
     width: 100%;
+    transition: 0.5s ease transform;
+    &:hover {
+      transform: scale(1.5);
+    }
   }
   .right {
     font-size: 1.5rem;
+    line-height: 150%;
+    font-weight: 600;
+  }
+  .point {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: bold;
   }
 }
 </style>

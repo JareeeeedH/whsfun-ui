@@ -6,7 +6,7 @@ import Post from '../views/Post';
 import Message from '../views/Message';
 
 // 主要的評論搜尋頁面
-import View from '../views/View';
+import WhiskyView from '../views/WhiskyView';
 
 const routes = [
   {
@@ -23,7 +23,7 @@ const routes = [
   {
     path: '/view',
     name: 'view',
-    component: View,
+    component: WhiskyView,
   },
   {
     path: '/register',

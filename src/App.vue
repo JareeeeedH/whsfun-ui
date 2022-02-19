@@ -14,7 +14,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import '@/style/main.scss';
 .main-area {
   max-width: 1240px;
   margin: auto;

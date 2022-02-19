@@ -33,8 +33,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import '@/style/main.scss';
+<style lang="scss" scoped>
+@import '@/style/_color.scss';
 
 #nav {
   display: flex;

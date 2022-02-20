@@ -2,37 +2,51 @@
   <div class="view-wrapper">
     <!-- 上方搜尋功能區塊 -->
     <SearchArea @emitSearch="searchHandler" />
+    <!-- warnin Message -->
+    <h1 v-if="warningMessage" style="color: red">
+      {{ warningMessage }}
+    </h1>
     <!-- 下方顯示評論區塊 -->
-    <ViewComponent :viewList="displayDataList" />
+    <ViewComponent v-if="displayDataList.length !== 0" :viewList="displayDataList" />
+    <div v-else>no Data</div>
   </div>
 </template>
 
 <script>
 // allData
 // import dataList from '../config/dataList';
-
 // 先使用demoList, 比較少資料
-import demoList from '../config/demoList';
-import { ref } from 'vue';
-import SearchArea from '../components/SearchArea.vue';
-import ViewComponent from '../components/WhiskyView.vue';
+import demoList from "../config/demoList";
 
-import { dataMap, searchView } from '../utils/searchView';
+import { ref } from "vue";
+import SearchArea from "../components/SearchArea.vue";
+import ViewComponent from "../components/ViewComponent.vue";
+
+import { dataMap, searchView } from "../utils/searchView";
 export default {
-  name: 'Home',
+  name: "Home",
   components: { ViewComponent, SearchArea },
   setup() {
-    let displayDataList = ref(dataMap(demoList));
+    let rowDisplayDataList = ref(dataMap(demoList));
+    let displayDataList = ref([]);
+    let warningMessage = ref("");
 
-    let searchHandler = function (searchTitle, searchPoints) {
-      let dataFiltered = searchView(
-        searchTitle,
-        searchPoints,
-        displayDataList.value
-      );
+    let searchHandler = function (searchContext, searchPoints, pointGreaterThan) {
+      // error Handling
+      // 至少搜尋標題三個字元
+      if (searchContext.length < 3) {
+        console.log("searchContext輸入的內容", searchContext);
+        warningMessage.value = "can not search less than three letter ";
+        return;
+      }
+
+      warningMessage.value = "";
+
+      // 調用搜尋功能的function
+      let dataFiltered = searchView(searchContext, searchPoints, pointGreaterThan, rowDisplayDataList.value);
       displayDataList.value = dataFiltered;
     };
-    return { displayDataList, searchHandler };
+    return { displayDataList, warningMessage, searchHandler };
   },
 };
 </script>

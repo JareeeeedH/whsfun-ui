@@ -7,7 +7,7 @@
         type="text"
         :icon="iconBottle"
         :hintMessage="hintMessage"
-        v-model="searchTitle"
+        v-model="searchContext"
       />
 
       <SearchBar
@@ -20,17 +20,19 @@
     </div>
 
     <!-- checkBox -->
-    <input class="check-box" type="checkbox" v-model="searchForGT" />
+    <input class="check-box" type="checkbox" v-model="pointGreaterThan" />
     <!-- search Button -->
     <button
       class="search-btn"
-      @click="$emit('emitSearch', searchTitle, searchPoints)"
+      @click="
+        $emit('emitSearch', searchContext, searchPoints, pointGreaterThan)
+      "
     >
       <i class="fas fa-search"></i>
     </button>
     <!-- 輸入的內容 -->
     <p class="search-result">
-      搜尋 : {{ searchTitle }} | {{ searchPoints }} points
+      搜尋 : {{ searchContext }} | {{ searchPoints }} points
     </p>
   </div>
 </template>
@@ -46,12 +48,12 @@ export default {
     const iconBottle = 'fa-solid fa-wine-bottle';
 
     // searchIcon
-    let searchForGT = ref(false);
+    let pointGreaterThan = ref(false);
     const iconGT = 'fa-solid fa-greater-than-equal';
     const iconEqual = 'fa-solid fa-equals';
 
     let scoreIcon = computed(() => {
-      return searchForGT.value ? iconGT : iconEqual;
+      return pointGreaterThan.value ? iconGT : iconEqual;
     });
 
     // 搜尋功能提示的內容
@@ -69,15 +71,15 @@ export default {
     };
 
     // search function
-    let searchTitle = ref('ardbeg10yo sherry');
-    let searchPoints = ref(80);
+    let searchContext = ref('ardbeg10yo sherry');
+    let searchPoints = ref(90);
 
     return {
       iconBottle,
       scoreIcon,
-      searchForGT,
+      pointGreaterThan,
       hintMessage,
-      searchTitle,
+      searchContext,
       searchPoints,
     };
   },

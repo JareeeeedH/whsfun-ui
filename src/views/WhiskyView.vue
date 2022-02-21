@@ -1,24 +1,24 @@
 <template>
   <div class="view-wrapper">
     <!-- 上方搜尋功能區塊 -->
-    <SearchArea @emitSearch="searchHandler" />
-    <!-- warnin Message -->
-    <h1 v-if="warningMessage" style="color: red">
-      {{ warningMessage }}
-    </h1>
+    <SearchArea :matchedNumber="matchedNumber" @emitSearch="searchHandler" />
     <!-- 下方顯示評論區塊 -->
     <ViewComponent v-if="displayDataList.length !== 0" :viewList="displayDataList" />
-    <div v-else>no Data</div>
+    <h5 v-else>no data / 沒有符合的評論</h5>
+    <!-- warnin Message -->
+    <h5 v-if="warningMessage" style="color: red">
+      {{ warningMessage }} / 請搜尋至少三個字
+    </h5>
   </div>
 </template>
 
 <script>
 // allData
-// import dataList from '../config/dataList';
+import dataList from '../config/dataList';
 // 先使用demoList, 比較少資料
-import demoList from "../config/demoList";
+// import demoList from "../config/demoList";
 
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import SearchArea from "../components/SearchArea.vue";
 import ViewComponent from "../components/ViewComponent.vue";
 
@@ -27,8 +27,14 @@ export default {
   name: "Home",
   components: { ViewComponent, SearchArea },
   setup() {
-    let rowDisplayDataList = ref(dataMap(demoList));
+    // row Data
+    let rowDisplayDataList = ref(dataMap(dataList));
+    // 搜尋到的dataList
     let displayDataList = ref([]);
+    // 搜尋到的數量
+    let matchedNumber = computed(()=>{
+      return ref(displayDataList.value.length)
+    });
     let warningMessage = ref("");
 
     let searchHandler = function (searchContext, searchPoints, pointGreaterThan) {
@@ -37,6 +43,7 @@ export default {
       if (searchContext.length < 3) {
         console.log("searchContext輸入的內容", searchContext);
         warningMessage.value = "can not search less than three letter ";
+        displayDataList.value = [];
         return;
       }
 
@@ -46,7 +53,7 @@ export default {
       let dataFiltered = searchView(searchContext, searchPoints, pointGreaterThan, rowDisplayDataList.value);
       displayDataList.value = dataFiltered;
     };
-    return { displayDataList, warningMessage, searchHandler };
+    return { displayDataList, warningMessage, matchedNumber, searchHandler };
   },
 };
 </script>

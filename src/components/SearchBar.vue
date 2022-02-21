@@ -9,10 +9,11 @@
           example : {{ hintMessage.exampleSearch }}</span
         >
         <span class="arrow">&#x21B4;</span>
+
         <div class="search-result">
-          {{ hintMessage.exampleVies.mainTitle }}
-          <br />
-          {{ hintMessage.exampleVies.subTitle }}
+        <span v-html="hintMessage.exampleVies.mainTitle"></span>
+          <br>
+        <span v-html="hintMessage.exampleVies.subTitle"></span>
         </div>
       </div>
     </i>
@@ -89,7 +90,7 @@ export default {
     border-radius: 2px;
     color: white;
     font-size: 1.25rem;
-    background-color: rgba($color: $amber-color, $alpha: 0.5);
+    background-color: rgba($color: $amber-color, $alpha: 0.2);
   }
 
   .arrow {

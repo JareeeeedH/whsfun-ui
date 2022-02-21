@@ -31,9 +31,18 @@
       <i class="fas fa-search"></i>
     </button>
     <!-- 輸入的內容 -->
-    <p class="search-result">
-      搜尋 : {{ searchContext }} | {{ searchPoints }} points
+    <p class="search-content">
+      <span class='displayTitle'>{{searchContentSplit[0]}}</span>
+
+      <div>
+        <span v-show='searchContentSplit[1]'>({{ (searchContentSplit[1]) }}) | </span>
+        <span>{{searchPoints}}</span>
+      </div>
+
     </p>
+
+    <span class='matched-result'> {{ matchedNumber }} 筆搜尋</span>
+
   </div>
 </template>
 
@@ -43,12 +52,18 @@ import { computed, ref } from 'vue';
 export default {
   name: 'search-area',
   components: { SearchBar },
+  props:{
+    matchedNumber:{
+      type: Number,
+      default: 0
+    }
+  },
   setup() {
     // icon CSS for component
     const iconBottle = 'fa-solid fa-wine-bottle';
 
     // searchIcon
-    let pointGreaterThan = ref(false);
+    let pointGreaterThan = ref(true);
     const iconGT = 'fa-solid fa-greater-than-equal';
     const iconEqual = 'fa-solid fa-equals';
 
@@ -62,17 +77,20 @@ export default {
         'one word : search title, following a space and second word for sub title(optional).',
       messageZh:
         '搜尋一個字,可搜尋評論 [標題] , 空一格後第二個字可以搜尋 [副標題] ',
-      exampleSearch: 'BenNevis21 sherry',
+      exampleSearch: 'BenNevis21 sherryWood',
       exampleVies: {
-        mainTitle: 'Ben Nevis 21 yo 1995/2017',
+        mainTitle: '<span style="color:green">Ben Nevis 21 </span>yo 1995/2017',
         subTitle:
-          '(52.7%, Wilson & Morgan, Barrel Selection, sherry wood, cask #656, 314 bottles)',
+          '(52.7%, Wilson & Morgan, Barrel Selection, <span style="color:green">sherry wood</span>, cask #656, 314 bottles)',
       },
     };
 
     // search function
-    let searchContext = ref('ardbeg10yo sherry');
+    let searchContext = ref('ben');
     let searchPoints = ref(90);
+
+    // 搜尋的內容拆分 title/ subTitle
+    let searchContentSplit = computed(()=>{ return searchContext.value.split(' ')})
 
     return {
       iconBottle,
@@ -81,6 +99,7 @@ export default {
       hintMessage,
       searchContext,
       searchPoints,
+      searchContentSplit,
     };
   },
 };
@@ -127,8 +146,26 @@ export default {
   border: none;
 }
 
-.search-result {
-  // position: absolute;
+.search-content {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
+  bottom: -6px;
+  left: 350px;
+  position: absolute;
+  font-size: 1rem;
+
+  .displayTitle{
+    font-size: 1.55rem;
+    font-weight: 600;
+  }
+}
+
+.matched-result{
+  position: absolute;
+  bottom: 0px;
+  right: 10px;
   padding: 1rem;
+  font-size: 1.5rem;;
 }
 </style>

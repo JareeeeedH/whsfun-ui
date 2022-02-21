@@ -19,5 +19,6 @@ export default {
 .main-area {
   max-width: 1240px;
   margin: auto;
+  padding: 0 1rem;
 }
 </style>

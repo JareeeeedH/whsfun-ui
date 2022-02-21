@@ -8,7 +8,7 @@
       <div class="content-area">
         <div class="left">
           <div class="img">
-            <img :src="view.imgSrc" alt="WhiskyPhoto" />
+            <img v-lazy="view.imgSrc" alt="WhiskyPhoto" />
           </div>
           <div class="point">
             <span> {{ view.SGP }}</span>
@@ -51,6 +51,7 @@ export default {
   border: 3px solid grey;
   // background-color: rgba(#ffbf00, 0.3);
   border-radius: 5px;
+  animation: fadeIn 1.5s ease;
 
   .title-area {
     padding: 0.75rem;
@@ -85,6 +86,18 @@ export default {
     align-items: center;
     font-size: 1rem;
     font-weight: bold;
+  }
+}
+
+@keyframes fadeIn{
+  0%{
+    opacity: 0;
+  }
+  50%{
+      opacity: 0.5;
+  }
+  100%{
+      opacity: 1;
   }
 }
 </style>

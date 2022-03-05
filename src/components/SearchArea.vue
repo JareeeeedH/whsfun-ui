@@ -108,10 +108,11 @@ export default {
 <style lang="scss" scoped>
 @import '@/style/_color.scss';
 .wrapper {
+  width: 100%;
   display: flex;
   position: relative;
-  padding: 1rem 0;
-  //   border: 2px solid grey;
+  padding: 2rem 2rem;
+  // border: 2px solid grey;
 }
 
 .search-btn {
@@ -119,8 +120,8 @@ export default {
   width: 45px;
   height: 35px;
   border-radius: 3px;
-  bottom: 22px;
-  left: 300px;
+  bottom: 30px;
+  left: 320px;
   background-color: transparent;
   border: none;
   &:hover {
@@ -140,8 +141,8 @@ export default {
   width: 1.25rem;
   height: 1.25rem;
   border-radius: 3px;
-  bottom: 30px;
-  left: 260px;
+  bottom: 37px;
+  left: 290px;
   background-color: transparent;
   border: none;
 }
@@ -151,7 +152,7 @@ export default {
   flex-direction: column;
   padding: 0 1rem;
   bottom: -6px;
-  left: 350px;
+  left: 400px;
   position: absolute;
   font-size: 1rem;
 

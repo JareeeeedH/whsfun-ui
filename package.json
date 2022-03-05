@@ -12,8 +12,10 @@
     "axios": "^0.25.0",
     "bootstrap": "^5.0.2",
     "core-js": "^3.6.5",
+    "swiper": "^6.8.4",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
+    "vue3-lazyload": "^0.2.5-beta",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
@@ -42,7 +44,12 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "vue/no-parsing-error": [2, { "x-invalid-end-tag": false }]
+      "vue/no-parsing-error": [
+        2,
+        {
+          "x-invalid-end-tag": false
+        }
+      ]
     }
   },
   "browserslist": [

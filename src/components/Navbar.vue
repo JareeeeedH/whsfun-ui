@@ -4,8 +4,8 @@
       {{ home }}
     </router-link>
     <router-link class="nav-item" to="/view">View</router-link>
-    <router-link class="nav-item" to="/about">About</router-link>
-    <router-link class="nav-item" to="/register">Register</router-link>
+    <!-- <router-link class="nav-item" to="/about">About</router-link> -->
+    <!-- <router-link class="nav-item" to="/register">Register</router-link> -->
     <router-link class="nav-item" to="/login">login</router-link>
     <router-link class="nav-item" to="/post">post</router-link>
     <router-link class="nav-item" to="/message">message</router-link>
@@ -13,17 +13,17 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { ref } from 'vue';
+import axios from "axios";
+import { ref } from "vue";
 
 export default {
-  name: 'index',
+  name: "index",
   setup() {
-    let home = ref('Home');
+    let home = ref("Home");
 
     const getIndex = () => {
-      axios.get('http://localhost:3000').then((data) => {
-        console.log('get index home message --->', data);
+      axios.get("http://localhost:3000").then((data) => {
+        console.log("get index home message --->", data);
         home.value = data.data;
       });
     };
@@ -34,7 +34,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/style/_color.scss';
+@import "@/style/_color.scss";
 
 #nav {
   display: flex;
@@ -60,7 +60,7 @@ export default {
     &::before {
       position: absolute;
       display: block;
-      content: '';
+      content: "";
       bottom: -1px;
       width: 5%;
       height: 2px;

@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: 'Home',
+  name: "ViewComponent",
   props: {
     viewList: {
       type: Array,
@@ -43,11 +43,12 @@ export default {
 <style lang="scss" scoped>
 .view-wrapper {
   width: 100%;
+  padding: 0rem 2rem;
 }
 .view {
   width: 100%;
   margin: 0.5rem 0;
-  // padding: 0.25rem 1rem;
+  padding: 0.25rem;
   border: 3px solid grey;
   // background-color: rgba(#ffbf00, 0.3);
   border-radius: 5px;
@@ -89,15 +90,15 @@ export default {
   }
 }
 
-@keyframes fadeIn{
-  0%{
+@keyframes fadeIn {
+  0% {
     opacity: 0;
   }
-  50%{
-      opacity: 0.5;
+  50% {
+    opacity: 0.5;
   }
-  100%{
-      opacity: 1;
+  100% {
+    opacity: 1;
   }
 }
 </style>

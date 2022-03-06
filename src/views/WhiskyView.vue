@@ -38,7 +38,7 @@ export default {
     let displayDataList = ref([]);
     // 搜尋到的數量
     let matchedNumber = computed(() => {
-      return ref(displayDataList.value.length);
+      return displayDataList.value.length;
     });
     let warningMessage = ref("");
 

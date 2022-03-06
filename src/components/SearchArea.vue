@@ -55,7 +55,6 @@ export default {
   props:{
     matchedNumber:{
       type: Number,
-      default: 0
     }
   },
   setup() {
@@ -165,8 +164,21 @@ export default {
 .matched-result{
   position: absolute;
   bottom: 0px;
-  right: 10px;
+  right: 30px;
   padding: 1rem;
   font-size: 1.5rem;;
 }
+
+@media screen and (max-width: 768px){
+  .search-content{
+    display: none
+  }
+  .matched-result{
+    // left:100px;
+    bottom:-50px;
+  }
+}  
+
+
+
 </style>

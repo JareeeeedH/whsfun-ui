@@ -21,6 +21,7 @@
       </swiper>
     </div>
 
+    <!-- pc版, 右邊的列表 -->
     <div class="view-info">
       <ul>
         <li
@@ -33,6 +34,11 @@
         </li>
       </ul>
     </div>
+
+    <!-- mobile每個威士忌名字 -->
+    <h3 class="indexItem">
+      {{ indexItem.mainTitle }}
+    </h3>
   </div>
 </template>
 
@@ -48,10 +54,13 @@ export default {
   name: "carousel",
   props: ["displayList"],
   components: { Swiper, SwiperSlide },
-  setup() {
+  setup(props) {
     let activeIndex = ref(0);
     // 存放swipe實例
     let swiper = ref(null);
+
+    // mobile顯示,輪播當前的名字
+    let indexItem = ref("");
 
     // 取得swiper實例
     function onSwiper(swiperObject) {
@@ -66,13 +75,15 @@ export default {
     // 偵聽切換觸發, 給li class
     function onSlideChange(evt) {
       activeIndex.value = evt.realIndex;
+      // 取得當筆輪播
+      indexItem.value = props.displayList[evt.realIndex];
     }
 
     onMounted(() => {
       // console.log(swiperObject);
     });
 
-    return { onSwiper, onSlideChange, choseView, activeIndex, swiper };
+    return { onSwiper, onSlideChange, choseView, activeIndex, swiper, indexItem };
   },
 };
 </script>
@@ -82,9 +93,9 @@ export default {
 .carousel-outer {
   width: 100%;
   display: flex;
-  padding: 5rem 2rem;
+  padding: 3rem 2rem;
   border-radius: 5px;
-  background: rgba($color: $grey-color, $alpha: 0.1);
+  background: rgba($color: $grey-color, $alpha: 1);
 }
 .swiper-wrapper {
   width: 30%;
@@ -118,5 +129,30 @@ img {
 
 .active {
   color: green;
+}
+
+.indexItem {
+  display: none;
+  text-align: center;
+  padding: 5px;
+}
+@media screen and (max-width: 768px) {
+  .carousel-outer {
+    display: block;
+  }
+  .swiper-wrapper {
+    width: 100%;
+  }
+  .view-info {
+    display: none;
+  }
+
+  .swiper-wrapper {
+    width: 100%;
+  }
+
+  .indexItem {
+    display: block;
+  }
 }
 </style>

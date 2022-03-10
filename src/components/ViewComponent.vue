@@ -73,8 +73,18 @@ export default {
     };
 
     const router = useRouter();
+    // 從搜尋評論,倒轉進去, 並把那一筆資料傳進去
     function PostRouteHandler(commentItem) {
-      router.push({ name: "Post", params: { commentItem: JSON.stringify(commentItem) } });
+      router.push({
+        name: "Post",
+        params: {
+          mainTitle: commentItem.mainTitle,
+          subTitle: commentItem.subTitle,
+          imgSrc: commentItem.imgSrc,
+          id: commentItem.id,
+          note: commentItem.note,
+        },
+      });
     }
 
     return {

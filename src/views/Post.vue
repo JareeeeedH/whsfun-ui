@@ -1,21 +1,25 @@
 <template>
   <div class="main-message">
     <div class="img-wrapper">
-      <img :src="parsePropsCommentItem.imgSrc" alt="" />
+      <img :src="imgSrc" alt="" />
     </div>
     <div class="info-area">
-      <h2>{{ parsePropsCommentItem.mainTitle }}</h2>
+      <h2>{{ mainTitle }}</h2>
       <br />
-      <h5>{{ parsePropsCommentItem.subTitle }}</h5>
+      <h5>{{ subTitle }}</h5>
     </div>
   </div>
   <div class="form-wrapper">
     <div class="form">
       <h3>Review and Rating for</h3>
-      <input disabled type="text" id="title" :value="parsePropsCommentItem.mainTitle" />
+      <!-- 名稱 -->
+      <!-- 如果是有從評論區傳過來的, 名字附上並且給 disabled -->
+      <input :disabled="mainTitle" type="text" id="title" v-model="title" />
+      <!-- 分數 -->
       <label for="points">My Rating: {{ points }}</label>
       <input type="range" min="0" max="100" step="1" id="points" v-model="points" />
       <label for="message">Write down your review?</label>
+      <!-- 評論 -->
       <textarea type="text" id="message" v-model="message" />
       <button type="button" class="button show-more">more..</button>
       <button type="button" class="button submit-button" @click="submitRegister">Submit</button>
@@ -30,28 +34,28 @@
 <script>
 import { ref } from "@vue/reactivity";
 import messageService from "../api-service/message-service";
-import { computed } from "@vue/runtime-core";
+// import { computed } from "@vue/runtime-core";
 
 export default {
   name: "register",
-  props: {
-    commentItem: {
-      type: String,
-    },
-  },
+  props: ["mainTitle", "subTitle", "imgSrc", "id", "note"],
   setup(props) {
-    let title = ref("ardbeg 10");
+    let title = ref("");
     let message = ref("good, i like Peated !");
     let points = ref(86);
+    let funId = ref("");
+
+    // 如果有從評價那邊丟props資料進來, title, id複製一份
+    if (props.mainTitle) {
+      title.value = JSON.stringify(props.mainTitle);
+      funId.value = Number(props.id);
+    }
 
     let token1 =
       "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjBiYmU1ZGY5MjUxMWYzZDE0YzE0NGEiLCJlbWFpbCI6IjExMUBnbWFpbC5jb20iLCJuYW1lIjoiamFyZWQiLCJpYXQiOjE2NDQ5MzY5MzR9.dTTeEexRmsn32A6Gf3XeUaqzFqvSLtsoVC4euUJogCU";
-    // let token2 = "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjBiYmU5OGY5MjUxMWYzZDE0YzE0NGQiLCJlbWFpbCI6IjIyMkBnbWFpbC5jb20iLCJuYW1lIjoiTmVsc29uIiwiaWF0IjoxNjQ0OTM2OTc5fQ.evZwKgDi2ci-zRKXzOxmfppJ0oOwhhTZgiTDOmy1TVc"
-    // let token3 = "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjBiYmVjOGY5MjUxMWYzZDE0YzE0NTAiLCJlbWFpbCI6IjMzM0BnbWFpbC5jb20iLCJuYW1lIjoiUGV0ZXIiLCJpYXQiOjE2NDQ5MzcwMjh9.orFzNwesCmF1SCOHAykZcGnnw9_YnX_ZmPdp99qIFLw"
 
-    // let token = "JWT abcdTest"
-
-    let user1 = "620bbe5df92511f3d14c144a";
+    // let user1 = "620bbe5df92511f3d14c144a";
+    let user2 = "622a0267244f5d35c711c7ac";
 
     let errorMessage = ref(null);
 
@@ -60,7 +64,8 @@ export default {
         title: title.value,
         content: message.value,
         points: points.value,
-        speaker: user1,
+        speaker: user2,
+        funId: funId.value,
       };
 
       messageService
@@ -85,11 +90,7 @@ export default {
         });
     };
 
-    let parsePropsCommentItem = computed(() => {
-      return JSON.parse(props.commentItem);
-    });
-
-    return { title, message, points, errorMessage, submitRegister, parsePropsCommentItem };
+    return { title, message, points, errorMessage, submitRegister };
   },
 };
 </script>

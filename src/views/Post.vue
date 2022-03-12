@@ -4,28 +4,50 @@
       <img :src="imgSrc" alt="" />
     </div>
     <div class="info-area">
-      <h2>{{ mainTitle }}</h2>
-      <br />
+      <h1>{{ mainTitle }}</h1>
       <h5>{{ subTitle }}</h5>
+    </div>
+  </div>
+  <div class="review-content">
+    <div class="review" v-for="review in searchDataById" :key="review._id">
+      <h5>{{ review._id }} | {{ review.title }} {{ review.cotent }}</h5>
+      <span>{{ review.nose }} | {{ review.taste }} | {{ review.finish }} </span>
     </div>
   </div>
   <div class="form-wrapper">
     <div class="form">
-      <h3>Review and Rating for</h3>
+      <h5>Write down my Review and Rating for:</h5>
       <!-- 名稱 -->
       <!-- 如果是有從評論區傳過來的, 名字附上並且給 disabled -->
-      <input :disabled="mainTitle" type="text" id="title" v-model="title" />
+      <input :disabled="mainTitle" type="text" id="title" placeholder="Ardbeg 10" v-model="title" />
       <!-- 分數 -->
-      <label for="points">My Rating: {{ points }}</label>
-      <input type="range" min="0" max="100" step="1" id="points" v-model="points" />
-      <label for="message">Write down your review?</label>
+      <input type="range" min="0" max="100" step="1" id="points" v-model="points" />Rating: {{ points }}
+      <!-- <label for="points">Rating: {{ points }}</label> -->
+      <label for="message">Write down your feeling?</label>
       <!-- 評論 -->
       <textarea type="text" id="message" v-model="message" />
-      <button type="button" class="button show-more">more..</button>
-      <button type="button" class="button submit-button" @click="submitRegister">Submit</button>
+      <button type="button" class="button show-more" @click="toggleDetail">
+        <i class="fa-solid fa-circle-info"></i>
+      </button>
+      <button type="button" class="button submit-button" @click="submitRegister">OK</button>
+    </div>
+    <div class="more-detail" v-show="displayDetail">
+      <div class="nose">
+        <h5>Nose</h5>
+        <textarea cols="50" rows="3" v-model="nose"></textarea>
+      </div>
+      <div class="Taste">
+        <h5>Taste</h5>
+        <textarea cols="50" rows="3" v-model="taste"></textarea>
+      </div>
+      <div class="Finish">
+        <h5>Finish</h5>
+        <textarea cols="50" rows="3" v-model="finish"></textarea>
+      </div>
     </div>
   </div>
-  <h1></h1>
+
+  <!-- error Message -->
   <div class="alert alert-danger" role="alert" v-show="errorMessage">
     {{ errorMessage }}
   </div>
@@ -43,29 +65,40 @@ export default {
     let title = ref("");
     let message = ref("good, i like Peated !");
     let points = ref(86);
-    let funId = ref("");
-
-    // 如果有從評價那邊丟props資料進來, title, id複製一份
-    if (props.mainTitle) {
-      title.value = JSON.stringify(props.mainTitle);
-      funId.value = Number(props.id);
-    }
+    // let funId = ""; //id不用連動, 直接使用
+    let nose = ref("");
+    let taste = ref("");
+    let finish = ref("");
 
     let token1 =
-      "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjBiYmU1ZGY5MjUxMWYzZDE0YzE0NGEiLCJlbWFpbCI6IjExMUBnbWFpbC5jb20iLCJuYW1lIjoiamFyZWQiLCJpYXQiOjE2NDQ5MzY5MzR9.dTTeEexRmsn32A6Gf3XeUaqzFqvSLtsoVC4euUJogCU";
+      "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJhMDI2NzI0NGY1ZDM1YzcxMWM3YWMiLCJlbWFpbCI6ImoxMjNAZ21haWwuY29tIiwibmFtZSI6ImoxMjMiLCJpYXQiOjE2NDcxMDczMTR9.AWakdxRqu_NuXcVkXND01-cWh57i2DVg8Uz1uiXa-io";
 
-    // let user1 = "620bbe5df92511f3d14c144a";
-    let user2 = "622a0267244f5d35c711c7ac";
-
+    let user1 = "622a0267244f5d35c711c7ac";
     let errorMessage = ref(null);
 
+    const searchDataById = ref(null);
+    // 有props進來, props就是whisky fun的資料內容
+    if (props.mainTitle) {
+      title.value = JSON.stringify(props.mainTitle);
+
+      // funId打api資料庫撈資料庫也有這筆這筆id的評論
+      messageService.getById(token1, props.id).then((foundData) => {
+        searchDataById.value = foundData.data.data;
+        console.log(searchDataById.value);
+      });
+    }
+
+    // 提交評論
     const submitRegister = () => {
       const post = {
         title: title.value,
         content: message.value,
         points: points.value,
-        speaker: user2,
-        funId: funId.value,
+        speaker: user1,
+        funId: props.id,
+        nose: nose.value,
+        taste: taste.value,
+        finish: finish.value,
       };
 
       messageService
@@ -90,7 +123,25 @@ export default {
         });
     };
 
-    return { title, message, points, errorMessage, submitRegister };
+    // more detail..
+    let displayDetail = ref(true);
+    let toggleDetail = function () {
+      displayDetail.value = !displayDetail.value;
+    };
+
+    return {
+      title,
+      message,
+      points,
+      nose,
+      taste,
+      finish,
+      errorMessage,
+      submitRegister,
+      toggleDetail,
+      displayDetail,
+      searchDataById,
+    };
   },
 };
 </script>
@@ -104,7 +155,7 @@ export default {
 
   .img-wrapper {
     width: 20%;
-    border: 2px solid red;
+    // border: 2px solid red;
     img {
       width: 50%;
       margin: auto;
@@ -113,36 +164,69 @@ export default {
   }
   .info-area {
     width: 80%;
-    border: 2px solid black;
+    // border: 2px solid black;
   }
 }
 
 // form
 .form-wrapper {
-  width: 100vw;
   display: flex;
-  justify-content: center;
+  display: none;
+  width: 100vw;
+  height: 50vh;
+  padding: 1rem;
+  border: 1px solid green;
+  // justify-content: center;
 }
 
 .form {
-  width: 70%;
+  width: 30%;
+  position: relative;
   display: flex;
   flex-direction: column;
   border: 2px solid red;
 
   input {
     width: 70%;
-    height: 20px;
+    height: 30px;
+    // borderL n
   }
 
   textarea {
     width: 70%;
-    height: 50px;
+    height: 100px;
   }
 
-  .button {
-    width: 50px;
-    height: 50px;
+  // .button {
+  //   position: absolute;
+  //   width: 35px;
+  //   height: 35px;
+  //   border: 1px solid #121212;
+  //   border-radius: 5px;
+  //   background-color: transparent;
+  // }
+
+  .submit-button {
+    // position: absolute;
+    width: 35px;
+    height: 35px;
+    // border: 1px solid #121212;
+    // border-radius: 5px;
+    // background-color: transparent;
+    // bottom: 55px;
   }
+  .show-more {
+    position: absolute;
+    padding: 3px;
+    border: 1px solid #121212;
+    border-radius: 5px;
+    background-color: transparent;
+    bottom: 100px;
+    right: 90px;
+  }
+}
+
+.more-detail {
+  width: 60%;
 }
 </style>

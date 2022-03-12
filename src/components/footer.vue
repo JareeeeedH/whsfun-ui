@@ -2,7 +2,7 @@
   <div class="footer">
     <span>HappyDrinker</span>
     <br />
-    <span>Email:happydrinker@gmail.com</span>
+    <span>Email:happydrinker888999@gmail.com</span>
   </div>
 </template>
 

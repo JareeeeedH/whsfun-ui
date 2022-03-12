@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import { ref } from "vue";
 
 export default {
@@ -22,10 +22,13 @@ export default {
     let home = ref("Home");
 
     const getIndex = () => {
-      axios.get("http://localhost:3000").then((data) => {
-        console.log("get index home message --->", data);
-        home.value = data.data;
-      });
+      // api測試取得文字
+      // axios.get("http://localhost:3000").then((data) => {
+      //   console.log("get index home message --->", data);
+      //   home.value = data.data;
+      // });
+
+      home.value = "HappyDrinker.com";
     };
 
     return { home, getIndex };
@@ -38,7 +41,7 @@ export default {
 
 #nav {
   display: flex;
-  padding: 1.25rem;
+  padding: 1rem;
   background-color: $dark-mode;
   :first-child {
     margin-right: auto;

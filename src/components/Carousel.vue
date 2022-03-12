@@ -91,11 +91,13 @@ export default {
 <style lang="scss" scoped>
 @import "@/style/_color.scss";
 .carousel-outer {
-  width: 100%;
+  width: 95%;
   display: flex;
   padding: 3rem 2rem;
   border-radius: 5px;
-  background: rgba($color: $grey-color, $alpha: 1);
+  background: linear-gradient(90deg, #eeeeee, #121212);
+  margin: auto;
+  margin-bottom: 200px;
 }
 .swiper-wrapper {
   width: 30%;

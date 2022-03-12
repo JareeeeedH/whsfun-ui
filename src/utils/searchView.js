@@ -83,33 +83,33 @@ let searchMethodCombine = function (payload) {
     let subTitleTextCheck = textTransfer(viewContent.subTitle);
 
     if (payload.method == "one") {
-      console.log("one : title Only");
+      // console.log("one : title Only");
       return titleTextCheck.indexOf(inputTitleTransfer) !== -1;
     }
 
     if (payload.method == "two") {
-      console.log("two : title + subTitle");
+      // console.log("two : title + subTitle");
       return (
         titleTextCheck.indexOf(inputTitleTransfer) !== -1 && subTitleTextCheck.indexOf(inputSubTitleTransfer) !== -1
       );
     }
 
     if (payload.method == "three") {
-      console.log("three : title + 分數 >=");
+      // console.log("three : title + 分數 >=");
       return (
         titleTextCheck.indexOf(inputTitleTransfer) !== -1 && Number(viewContent.points) >= Number(payload.searchPoint)
       );
     }
 
     if (payload.method == "four") {
-      console.log("four : title + =(剛好等於)");
+      // console.log("four : title + =(剛好等於)");
       return (
         titleTextCheck.indexOf(inputTitleTransfer) !== -1 && Number(viewContent.points) == Number(payload.searchPoint)
       );
     }
 
     if (payload.method == "five") {
-      console.log("title + subTitle + points, >=大於等於");
+      // console.log("title + subTitle + points, >=大於等於");
       return (
         titleTextCheck.indexOf(inputTitleTransfer) !== -1 &&
         subTitleTextCheck.indexOf(inputSubTitleTransfer) !== -1 &&
@@ -118,7 +118,7 @@ let searchMethodCombine = function (payload) {
     }
 
     if (payload.method == "six") {
-      console.log("title + subTitle + points, = 剛好等於");
+      // console.log("title + subTitle + points, = 剛好等於");
       return (
         titleTextCheck.indexOf(inputTitleTransfer) !== -1 &&
         subTitleTextCheck.indexOf(inputSubTitleTransfer) !== -1 &&
@@ -126,7 +126,7 @@ let searchMethodCombine = function (payload) {
       );
     }
   });
-  console.log("filteredData", filteredData);
+  // console.log("filteredData", filteredData);
   return filteredData;
 };
 

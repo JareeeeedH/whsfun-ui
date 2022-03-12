@@ -53,13 +53,13 @@ export default {
       require: true,
     },
   },
-  setup(props) {
+  setup() {
     let openModal = ref(false);
     let modalTitle = ref("");
     let modalSubtitle = ref("");
     let modalNote = ref("");
     let modalImg = ref("");
-    console.log(props);
+    // console.log(props);
 
     let toggleModal = function (swift, modalDisplayContent) {
       console.log(swift);

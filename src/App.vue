@@ -10,9 +10,17 @@
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/footer.vue";
 
+// router
+import { useRouter } from "vue-router";
+
 export default {
   name: "index",
   components: { Navbar, Footer },
+  setup() {
+    const router = useRouter();
+    // const route = useRoute();
+    router.push("/view");
+  },
 };
 </script>
 

@@ -110,7 +110,7 @@ export default {
   width: 100%;
   display: flex;
   position: relative;
-  padding: 2rem 2rem;
+  padding: 0.5rem 2rem;
   // border: 2px solid grey;
 }
 

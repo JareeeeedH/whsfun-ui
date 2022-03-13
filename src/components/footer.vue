@@ -12,10 +12,7 @@ export default {};
 
 <style>
 .footer {
-  position: fixed;
-  width: 100vw;
-  height: 250px;
-  /* padding: 0 2rem; */
+  padding: 1.18rem 0;
   color: rgb(200, 200, 200);
   background-color: #121212;
 }

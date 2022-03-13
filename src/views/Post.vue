@@ -8,12 +8,10 @@
       <h5>{{ subTitle }}</h5>
     </div>
   </div>
-  <div class="review-content">
-    <div class="review" v-for="review in searchDataById" :key="review._id">
-      <h5>{{ review._id }} | {{ review.title }} {{ review.cotent }}</h5>
-      <span>{{ review.nose }} | {{ review.taste }} | {{ review.finish }} </span>
-    </div>
-  </div>
+  <!-- 會員的評論 -->
+  <MemberReview v-for="review in searchDataById" :key="review._id" :review="review" />
+
+  <!-- 把form拆元件 -->
   <div class="form-wrapper">
     <div class="form">
       <h5>Write down my Review and Rating for:</h5>
@@ -47,6 +45,14 @@
     </div>
   </div>
 
+  <!-- 如果沒有評論 -->
+  <div class="no-reviews" v-if="+searchDataById.length === 0">
+    <p class="no-reviews-msg">There is no others review yet.</p>
+    <!-- 寫 or login 二擇一 -->
+    <button class="write-btn">Write my review</button>
+    <!-- <router-link class="login-up" to="/login">login to write<i class="fa-solid fa-arrow-right"></i></router-link> -->
+  </div>
+
   <!-- error Message -->
   <div class="alert alert-danger" role="alert" v-show="errorMessage">
     {{ errorMessage }}
@@ -56,11 +62,12 @@
 <script>
 import { ref } from "@vue/reactivity";
 import messageService from "../api-service/message-service";
-// import { computed } from "@vue/runtime-core";
+import MemberReview from "../components/MemberReview.vue";
 
 export default {
   name: "register",
   props: ["mainTitle", "subTitle", "imgSrc", "id", "note"],
+  components: { MemberReview },
   setup(props) {
     let title = ref("");
     let message = ref("good, i like Peated !");
@@ -76,7 +83,7 @@ export default {
     let user1 = "622a0267244f5d35c711c7ac";
     let errorMessage = ref(null);
 
-    const searchDataById = ref(null);
+    const searchDataById = ref([]);
     // 有props進來, props就是whisky fun的資料內容
     if (props.mainTitle) {
       title.value = JSON.stringify(props.mainTitle);
@@ -147,6 +154,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "@/style/_color.scss";
 .main-message {
   display: flex;
   width: 100%;
@@ -164,6 +172,8 @@ export default {
   }
   .info-area {
     width: 80%;
+    line-height: 100px;
+    margin: auto;
     // border: 2px solid black;
   }
 }
@@ -171,7 +181,7 @@ export default {
 // form
 .form-wrapper {
   display: flex;
-  display: none;
+  // display: none;
   width: 100vw;
   height: 50vh;
   padding: 1rem;
@@ -197,23 +207,9 @@ export default {
     height: 100px;
   }
 
-  // .button {
-  //   position: absolute;
-  //   width: 35px;
-  //   height: 35px;
-  //   border: 1px solid #121212;
-  //   border-radius: 5px;
-  //   background-color: transparent;
-  // }
-
   .submit-button {
-    // position: absolute;
     width: 35px;
     height: 35px;
-    // border: 1px solid #121212;
-    // border-radius: 5px;
-    // background-color: transparent;
-    // bottom: 55px;
   }
   .show-more {
     position: absolute;
@@ -228,5 +224,31 @@ export default {
 
 .more-detail {
   width: 60%;
+}
+
+// 沒有評論內容的
+.no-reviews {
+  text-align: center;
+  padding: 3rem 0;
+
+  .no-reviews-msg {
+    font-size: 2rem;
+  }
+
+  .write-btn {
+    border: none;
+    padding: 5px;
+    border: 1px solid $amber-color;
+    border-radius: 3px;
+    background-color: transparent;
+
+    &:hover {
+      background-color: $amber-color;
+      color: white;
+    }
+  }
+
+  .login-up {
+  }
 }
 </style>

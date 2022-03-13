@@ -26,10 +26,30 @@ export default {
 
 <style lang="scss">
 @import "@/style/main.scss";
+
+html,
+body,
+#app {
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
 .main-area {
-  height: 85vh;
-  // max-width: 1240px;
-  // margin: auto;
-  // padding: 0 1rem;
+  min-height: calc(82vh);
 }
 </style>

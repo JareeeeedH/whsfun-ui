@@ -101,14 +101,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/style/_color.scss";
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
-}
 
 .view-wrapper {
   // position: relative;

@@ -66,7 +66,7 @@ export default {
 .register-page {
   position: relative;
   width: 100vw;
-  height: 90vh;
+  height: 82vh;
   background: url("../imgs/register.jpg");
   opacity: 0.8;
   background-position: center;

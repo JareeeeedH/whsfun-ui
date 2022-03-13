@@ -8,7 +8,7 @@
           This is a website about to get you search those Whisky reviews more comfortable from
           <a href="http://www.whiskyfun.com/">Whiskyfun</a> own by Angus.
           <br />
-          Please check our search function in View page.
+          Please check our search function in <router-link to="/view">View</router-link> page.
           <br />
           You can write down your feelings, then in future we can see see more and more sharing from the world.
           <br />
@@ -32,7 +32,8 @@
 
 <style scoped>
 .home {
-  padding: 2rem;
+  padding: 1rem;
+  height: 82vh;
 }
 
 .home-message {

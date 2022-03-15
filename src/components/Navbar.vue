@@ -13,7 +13,7 @@
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
 import { ref } from "vue";
 
 export default {
@@ -22,11 +22,13 @@ export default {
     let home = ref("Home");
 
     const getIndex = () => {
-      // api測試取得文字
-      // axios.get("http://localhost:3000").then((data) => {
-      //   console.log("get index home message --->", data);
-      //   home.value = data.data;
-      // });
+
+      // call Api測試heroku Server
+      let apiUrl = 'https://whisky-happy.herokuapp.com/api/message/post'
+      const token =
+      "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjBiYmU1ZGY5MjUxMWYzZDE0YzE0NGEiLCJlbWFpbCI6IjExMUBnbWFpbC5jb20iLCJuYW1lIjoiamFyZWQiLCJpYXQiOjE2NDQ5MzY5MzR9.dTTeEexRmsn32A6Gf3XeUaqzFqvSLtsoVC4euUJogCU";
+
+      axios.get(apiUrl, {headers: {Authorization: token}}).then((data)=>{console.log(data)});
 
       home.value = "HappyDrinker.com";
     };

@@ -8,11 +8,15 @@
       <h5>{{ subTitle }}</h5>
     </div>
   </div>
-  <!-- 會員的評論 -->
-  <MemberReview v-for="review in searchDataById" :key="review._id" :review="review" />
+  <div class="write-review">
+    <button @click="toggleForm">
+      WRITE
+      <i class="fa-solid fa-comments"></i>
+    </button>
+  </div>
 
-  <!-- 把form拆元件 -->
-  <div class="form-wrapper">
+  <!-- form表單 -->
+  <div class="form-wrapper" :class="{ active: displayForm }">
     <div class="form">
       <h5>Write down my Review and Rating for:</h5>
       <!-- 名稱 -->
@@ -24,29 +28,38 @@
       <label for="message">Write down your feeling?</label>
       <!-- 評論 -->
       <textarea type="text" id="message" v-model="message" />
+      <!-- 關閉表單 X-->
+      <button type="button" class="button close-form" @click="toggleForm">X</button>
+      <!-- 打開顯示更多-->
       <button type="button" class="button show-more" @click="toggleDetail">
         <i class="fa-solid fa-circle-info"></i>
       </button>
       <button type="button" class="button submit-button" @click="submitRegister">OK</button>
-    </div>
-    <div class="more-detail" v-show="displayDetail">
-      <div class="nose">
-        <h5>Nose</h5>
-        <textarea cols="50" rows="3" v-model="nose"></textarea>
-      </div>
-      <div class="Taste">
-        <h5>Taste</h5>
-        <textarea cols="50" rows="3" v-model="taste"></textarea>
-      </div>
-      <div class="Finish">
-        <h5>Finish</h5>
-        <textarea cols="50" rows="3" v-model="finish"></textarea>
-      </div>
+      <!-- <br /> -->
+      <transition name="fade">
+        <div class="more-detail" :class="{ 'more-active': displayDetail }">
+          <div class="nose">
+            <h5>Nose</h5>
+            <textarea cols="50" rows="3" v-model="nose"></textarea>
+          </div>
+          <div class="Taste">
+            <h5>Taste</h5>
+            <textarea cols="50" rows="3" v-model="taste"></textarea>
+          </div>
+          <div class="Finish">
+            <h5>Finish</h5>
+            <textarea cols="50" rows="3" v-model="finish"></textarea>
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
 
+  <!-- 會員的評論 -->
+  <MemberReview v-for="review in searchDataById" :key="review._id" :review="review" />
+
   <!-- 如果沒有評論 -->
-  <div class="no-reviews" v-if="+searchDataById.length === 0">
+  <div class="no-reviews" v-if="displayNoReviewsHint">
     <p class="no-reviews-msg">There is no others review yet.</p>
     <!-- 寫 or login 二擇一 -->
     <button class="write-btn">Write my review</button>
@@ -76,10 +89,13 @@ export default {
     let nose = ref("");
     let taste = ref("");
     let finish = ref("");
+    let displayNoReviewsHint = ref(false); //有丟props進來, 並且資料庫沒資料, 才要顯示
+
+    // let token2 =
+    //   "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJhMDI2NzI0NGY1ZDM1YzcxMWM3YWMiLCJlbWFpbCI6ImoxMjNAZ21haWwuY29tIiwibmFtZSI6ImoxMjMiLCJpYXQiOjE2NDcxMDczMTR9.AWakdxRqu_NuXcVkXND01-cWh57i2DVg8Uz1uiXa-io";
 
     let token1 =
-      "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJhMDI2NzI0NGY1ZDM1YzcxMWM3YWMiLCJlbWFpbCI6ImoxMjNAZ21haWwuY29tIiwibmFtZSI6ImoxMjMiLCJpYXQiOjE2NDcxMDczMTR9.AWakdxRqu_NuXcVkXND01-cWh57i2DVg8Uz1uiXa-io";
-
+      "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMzNjRiNWU5MTQ5YWVlN2U4NDI5OTUiLCJlbWFpbCI6ImozMzMzM0BnbWFpbC5jb20iLCJuYW1lIjoiSm9obkNoZW4iLCJpYXQiOjE2NDc1MzUyOTR9.5arNnWThwb64MRLdudyKEdQ0P1zAfJed8PaPXTyjsEg";
     let user1 = "622a0267244f5d35c711c7ac";
     let errorMessage = ref(null);
 
@@ -90,8 +106,14 @@ export default {
 
       // funId打api資料庫撈資料庫也有這筆這筆id的評論
       messageService.getById(token1, props.id).then((foundData) => {
-        searchDataById.value = foundData.data.data;
-        console.log(searchDataById.value);
+        searchDataById.value = foundData.data.data.reverse();
+        // reviews from DB
+        // console.log('searched',searchDataById.value);
+        console.log("searchDataById", searchDataById);
+
+        if (searchDataById.value.length === 0) {
+          displayNoReviewsHint.value = true;
+        }
       });
     }
 
@@ -112,6 +134,19 @@ export default {
         .post(post, token1)
         .then((response) => {
           console.log("post OK --->", response);
+
+          // 添加, 把資料加進去array渲染
+          // 需要添加user Name
+          // 先這樣加上假名字, 之後再處理
+          // 先這樣加上假名字, 之後再處理
+          // 先這樣加上假名字, 之後再處理
+          let newData = response.data.data;
+          newData.speaker = { name: "jared" };
+          searchDataById.value.unshift(newData);
+          console.log(newData);
+
+          // 關掉表單
+          toggleForm();
         })
         .catch((err) => {
           // 目前我想到的兩種 error
@@ -131,7 +166,14 @@ export default {
     };
 
     // more detail..
-    let displayDetail = ref(true);
+    let displayForm = ref(false);
+
+    let toggleForm = function () {
+      console.log(displayForm.value);
+      displayForm.value = !displayForm.value;
+    };
+    // more detail..
+    let displayDetail = ref(false);
     let toggleDetail = function () {
       displayDetail.value = !displayDetail.value;
     };
@@ -146,8 +188,11 @@ export default {
       errorMessage,
       submitRegister,
       toggleDetail,
+      toggleForm,
       displayDetail,
+      displayForm,
       searchDataById,
+      displayNoReviewsHint,
     };
   },
 };
@@ -178,52 +223,106 @@ export default {
   }
 }
 
+.write-review {
+  padding: 1rem 2.5rem;
+  button {
+    border: none;
+    border-radius: 5px;
+    padding: 0.55rem;
+    background-color: $amber-color;
+  }
+}
+
 // form
 .form-wrapper {
+  opacity: 0;
   display: flex;
-  // display: none;
-  width: 100vw;
-  height: 50vh;
+  position: absolute;
+  border-radius: 10px;
+  width: 50vw;
   padding: 1rem;
-  border: 1px solid green;
-  // justify-content: center;
+  top: 70px;
+  background: linear-gradient(45deg, $amber-color, $amber-color, #121212);
+  box-shadow: 0 0 0px 5px rgba($color: #121212, $alpha: 0.7);
+  left: 50%;
+  transform: translateX(-50%);
+  transition: all 0.5s;
+}
+
+.active {
+  opacity: 1;
 }
 
 .form {
-  width: 30%;
+  width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
-  border: 2px solid red;
 
   input {
-    width: 70%;
-    height: 30px;
-    // borderL n
+    width: 80%;
+    height: 35px;
   }
 
   textarea {
-    width: 70%;
+    width: 80%;
     height: 100px;
   }
 
   .submit-button {
-    width: 35px;
-    height: 35px;
+    position: relative;
+    left: 80%;
+    width: 50px;
+    height: 30px;
+    border: none;
+    // background-color: rgb(0, 0, 0);
+    color: #121212;
+    border-radius: 5px;
+    &:hover {
+      color: rgb(255, 255, 255);
+      background-color: green;
+      // border: 1px solid $amber-color;
+    }
   }
-  .show-more {
+
+  .show-more,
+  .close-form {
+    width: 30px;
+    height: 30px;
     position: absolute;
     padding: 3px;
-    border: 1px solid #121212;
+    border: 1px solid #ffffff;
     border-radius: 5px;
     background-color: transparent;
-    bottom: 100px;
-    right: 90px;
+  }
+  .show-more {
+    right: 50px;
+    &:hover {
+      background-color: $amber-color;
+    }
+    .fa-solid {
+      color: white;
+    }
+  }
+
+  .close-form {
+    color: white;
+    right: 10px;
+
+    &:hover {
+      background-color: red;
+    }
   }
 }
 
 .more-detail {
-  width: 60%;
+  opacity: 0;
+  display: none;
+}
+
+.more-active {
+  opacity: 1;
+  display: block;
 }
 
 // 沒有評論內容的
@@ -249,6 +348,12 @@ export default {
   }
 
   .login-up {
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .form-wrapper {
+    width: 85vw;
   }
 }
 </style>

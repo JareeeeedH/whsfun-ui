@@ -12,7 +12,7 @@ export default {};
 
 <style>
 .footer {
-  padding: 1.18rem 0;
+  padding: 1.25rem 1rem;
   color: rgb(200, 200, 200);
   background-color: #121212;
 }

@@ -10,16 +10,18 @@
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/footer.vue";
 
+import userService from "./api-service/user-auth";
 // router
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 
 export default {
   name: "index",
   components: { Navbar, Footer },
   setup() {
-    const router = useRouter();
-    // const route = useRoute();
-    router.push("/view");
+    // const router = useRouter();
+    let userData = JSON.parse(userService.get());
+    console.log(userData);
+    // router.push("/view");
   },
 };
 </script>
@@ -50,6 +52,6 @@ h6 {
   margin: 0;
 }
 .main-area {
-  min-height: calc(82vh);
+  min-height: calc(85vh);
 }
 </style>

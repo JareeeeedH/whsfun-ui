@@ -4,7 +4,11 @@ class userService {
     window.localStorage.setItem("drinker", JSON.stringify(userData));
   }
   get() {
-    return window.localStorage.getItem("drinker");
+    let drinker = window.localStorage.getItem("drinker");
+    if (drinker) {
+      return JSON.parse(drinker);
+    }
+    return "";
   }
   logOut() {
     window.localStorage.setItem("drinker", "");

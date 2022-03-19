@@ -1,7 +1,7 @@
 <template>
-  <Navbar />
+  <Navbar :userData="savedUser" />
   <div class="main-area">
-    <router-view />
+    <router-view @changeAuth="authHandler" />
   </div>
   <Footer />
 </template>
@@ -9,19 +9,26 @@
 <script>
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/footer.vue";
-
 import userService from "./api-service/user-auth";
-// router
-// import { useRouter } from "vue-router";
+import { ref } from "vue";
+// import { useRoute } from "vue-router";
 
 export default {
   name: "index",
   components: { Navbar, Footer },
   setup() {
-    // const router = useRouter();
-    let userData = JSON.parse(userService.get());
-    console.log(userData);
-    // router.push("/view");
+    let savedUser = ref("");
+    savedUser.value = userService.get();
+    console.log(savedUser);
+
+    // emit事件
+    let authHandler = function (status, userData) {
+      console.log("get emit ");
+      console.log("event:", status, "data:", userData);
+      savedUser.value = userData;
+    };
+
+    return { savedUser, authHandler };
   },
 };
 </script>

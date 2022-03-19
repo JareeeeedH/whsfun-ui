@@ -44,7 +44,8 @@ import { useRouter } from "vue-router";
 
 export default {
   name: "register",
-  setup() {
+  emit: ["changeAuth"],
+  setup(props, context) {
     let email = ref("jayChou@gmail.com");
     let password = ref("jayChou");
     let loginErrorMessage = ref("");
@@ -64,13 +65,16 @@ export default {
 
           // 大寫OK
           if (response.data.message === "OK") {
-            console.log(response, "ok 通過");
+            // console.log(response, "ok 登入成功");
             successLoginMessage.value = "登入成功";
 
             // 登入成功, 資料存localStorage
             let { token } = response.data;
             let userData = { ...response.data.data, token };
             userService.save(userData);
+
+            // emit資料出看外面
+            context.emit("changeAuth", "login", userData);
 
             setTimeout(() => {
               router.push("/");

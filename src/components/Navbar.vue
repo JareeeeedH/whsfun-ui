@@ -4,20 +4,24 @@
       {{ home }}
     </router-link>
     <router-link class="nav-item" to="/view">View</router-link>
-    <!-- <router-link class="nav-item" to="/about">About</router-link> -->
-    <!-- <router-link class="nav-item" to="/register">Register</router-link> -->
-    <router-link class="nav-item" to="/login">login</router-link>
     <router-link class="nav-item" to="/post">post</router-link>
     <router-link class="nav-item" to="/message">message</router-link>
+
+    <router-link class="nav-item" v-if="userData" to="/login"
+      >logout</router-link
+    >
+    <router-link class="nav-item" v-else to="/login">login</router-link>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import { ref } from "vue";
+// import userService from "../api-service/user-auth";
 
 export default {
-  name: "index",
+  name: "Nav",
+  props: ["userData"],
   setup() {
     let home = ref("Home");
 

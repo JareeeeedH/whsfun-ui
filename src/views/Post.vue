@@ -8,7 +8,7 @@
       <h5>{{ subTitle }}</h5>
     </div>
   </div>
-  <div class="write-review">
+  <div class="write-review" v-if="userData">
     <button @click="toggleForm">
       WRITE
       <i class="fa-solid fa-comments"></i>
@@ -21,20 +21,41 @@
       <h5>Write down my Review and Rating for:</h5>
       <!-- 名稱 -->
       <!-- 如果是有從評論區傳過來的, 名字附上並且給 disabled -->
-      <input :disabled="mainTitle" type="text" id="title" placeholder="Ardbeg 10" v-model="title" />
+      <input
+        :disabled="mainTitle"
+        type="text"
+        id="title"
+        placeholder="Ardbeg 10"
+        v-model="title"
+      />
       <!-- 分數 -->
-      <input type="range" min="0" max="100" step="1" id="points" v-model="points" />Rating: {{ points }}
+      <input
+        type="range"
+        min="0"
+        max="100"
+        step="1"
+        id="points"
+        v-model="points"
+      />Rating: {{ points }}
       <!-- <label for="points">Rating: {{ points }}</label> -->
       <label for="message">Write down your feeling?</label>
       <!-- 評論 -->
       <textarea type="text" id="message" v-model="message" />
       <!-- 關閉表單 X-->
-      <button type="button" class="button close-form" @click="toggleForm">X</button>
+      <button type="button" class="button close-form" @click="toggleForm">
+        X
+      </button>
       <!-- 打開顯示更多-->
       <button type="button" class="button show-more" @click="toggleDetail">
         <i class="fa-solid fa-circle-info"></i>
       </button>
-      <button type="button" class="button submit-button" @click="submitRegister">OK</button>
+      <button
+        type="button"
+        class="button submit-button"
+        @click="submitRegister"
+      >
+        OK
+      </button>
       <!-- <br /> -->
       <transition name="fade">
         <div class="more-detail" :class="{ 'more-active': displayDetail }">
@@ -56,14 +77,22 @@
   </div>
 
   <!-- 會員的評論 -->
-  <MemberReview v-for="review in searchDataById" :key="review._id" :review="review" />
+  <MemberReview
+    v-for="review in searchDataById"
+    :key="review._id"
+    :review="review"
+  />
 
   <!-- 如果沒有評論 -->
   <div class="no-reviews" v-if="displayNoReviewsHint">
     <p class="no-reviews-msg">There is no others review yet.</p>
     <!-- 寫 or login 二擇一 -->
-    <button class="write-btn">Write my review</button>
-    <!-- <router-link class="login-up" to="/login">login to write<i class="fa-solid fa-arrow-right"></i></router-link> -->
+    <button class="write-btn" v-if="userData" @click="toggleForm">
+      Write my review
+    </button>
+    <router-link v-else class="login-up write-btn" to="/login"
+      >login to write<i class="fa-solid fa-arrow-right"></i
+    ></router-link>
   </div>
 
   <!-- error Message -->
@@ -79,24 +108,17 @@ import MemberReview from "../components/MemberReview.vue";
 
 export default {
   name: "register",
-  props: ["mainTitle", "subTitle", "imgSrc", "id", "note"],
+  props: ["mainTitle", "subTitle", "imgSrc", "id", "note", "userData"],
   components: { MemberReview },
   setup(props) {
     let title = ref("");
     let message = ref("good, i like Peated !");
     let points = ref(86);
-    // let funId = ""; //id不用連動, 直接使用
     let nose = ref("");
     let taste = ref("");
     let finish = ref("");
     let displayNoReviewsHint = ref(false); //有丟props進來, 並且資料庫沒資料, 才要顯示
 
-    // let token2 =
-    //   "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJhMDI2NzI0NGY1ZDM1YzcxMWM3YWMiLCJlbWFpbCI6ImoxMjNAZ21haWwuY29tIiwibmFtZSI6ImoxMjMiLCJpYXQiOjE2NDcxMDczMTR9.AWakdxRqu_NuXcVkXND01-cWh57i2DVg8Uz1uiXa-io";
-
-    let token1 =
-      "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMzNjRiNWU5MTQ5YWVlN2U4NDI5OTUiLCJlbWFpbCI6ImozMzMzM0BnbWFpbC5jb20iLCJuYW1lIjoiSm9obkNoZW4iLCJpYXQiOjE2NDc1MzUyOTR9.5arNnWThwb64MRLdudyKEdQ0P1zAfJed8PaPXTyjsEg";
-    let user1 = "622a0267244f5d35c711c7ac";
     let errorMessage = ref(null);
 
     const searchDataById = ref([]);
@@ -105,16 +127,16 @@ export default {
       title.value = JSON.stringify(props.mainTitle);
 
       // funId打api資料庫撈資料庫也有這筆這筆id的評論
-      messageService.getById(token1, props.id).then((foundData) => {
-        searchDataById.value = foundData.data.data.reverse();
-        // reviews from DB
-        // console.log('searched',searchDataById.value);
-        console.log("searchDataById", searchDataById);
+      messageService
+        .getById(props.userData.token, props.id)
+        .then((foundData) => {
+          searchDataById.value = foundData.data.data.reverse();
+          console.log("searchDataById", searchDataById);
 
-        if (searchDataById.value.length === 0) {
-          displayNoReviewsHint.value = true;
-        }
-      });
+          if (searchDataById.value.length === 0) {
+            displayNoReviewsHint.value = true;
+          }
+        });
     }
 
     // 提交評論
@@ -123,30 +145,27 @@ export default {
         title: title.value,
         content: message.value,
         points: points.value,
-        speaker: user1,
+        speaker: props.userData._id,
         funId: props.id,
         nose: nose.value,
         taste: taste.value,
         finish: finish.value,
       };
 
+      // call Api提交評論
       messageService
-        .post(post, token1)
+        .post(post, props.userData.token)
         .then((response) => {
-          console.log("post OK --->", response);
-
-          // 添加, 把資料加進去array渲染
-          // 需要添加user Name
-          // 先這樣加上假名字, 之後再處理
-          // 先這樣加上假名字, 之後再處理
-          // 先這樣加上假名字, 之後再處理
+          // 這邊利用props.userData的name直接放在response回傳, 直接加上畫面, 替代重打api load資料.
           let newData = response.data.data;
-          newData.speaker = { name: "jared" };
+          newData.speaker = { name: props.userData.name };
           searchDataById.value.unshift(newData);
-          console.log(newData);
 
           // 關掉表單
           toggleForm();
+
+          // 關閉 沒有任何評論的提示
+          displayNoReviewsHint.value = false;
         })
         .catch((err) => {
           // 目前我想到的兩種 error
@@ -348,6 +367,7 @@ export default {
   }
 
   .login-up {
+    text-decoration: none;
   }
 }
 

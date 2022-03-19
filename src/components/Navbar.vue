@@ -1,44 +1,53 @@
 <template>
   <div id="nav">
-    <router-link @click="getIndex" class="nav-item" to="/">
+    <router-link class="nav-item" to="/">
       {{ home }}
     </router-link>
     <router-link class="nav-item" to="/view">View</router-link>
-    <router-link class="nav-item" to="/post">post</router-link>
+    <!-- post 頁籤先不要 -->
+    <!-- <router-link class="nav-item" to="/post">post</router-link> -->
     <router-link class="nav-item" to="/message">message</router-link>
 
-    <router-link class="nav-item" v-if="userData" to="/login"
-      >logout</router-link
-    >
+    <a class="nav-item log-out-item" v-if="userData" @click="logOut">logout</a>
     <router-link class="nav-item" v-else to="/login">login</router-link>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import { ref } from "vue";
-// import userService from "../api-service/user-auth";
+import { useRouter } from "vue-router";
+import userService from "../api-service/user-auth";
 
 export default {
   name: "Nav",
   props: ["userData"],
-  setup() {
+  emit: ["changeAuth"],
+  setup(props, context) {
     let home = ref("Home");
 
-    const getIndex = () => {
-      // call Api測試heroku Server
-      let apiUrl = "https://whisky-happy.herokuapp.com/api/message/post";
-      const token =
-        "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjBiYmU1ZGY5MjUxMWYzZDE0YzE0NGEiLCJlbWFpbCI6IjExMUBnbWFpbC5jb20iLCJuYW1lIjoiamFyZWQiLCJpYXQiOjE2NDQ5MzY5MzR9.dTTeEexRmsn32A6Gf3XeUaqzFqvSLtsoVC4euUJogCU";
+    const router = useRouter();
 
-      axios.get(apiUrl, { headers: { Authorization: token } }).then((data) => {
-        console.log(data, "server api test!");
-      });
-
-      home.value = "HappyDrinker.com";
+    let logOut = function () {
+      userService.logOut();
+      context.emit("changeAuth", "logOut", "");
+      router.push("/login");
     };
 
-    return { home, getIndex };
+    // const getIndex = () => {
+    //   // call Api測試heroku Server
+    //   let apiUrl = "https://whisky-happy.herokuapp.com/api/message/post";
+    //   const token =
+    //     "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjBiYmU1ZGY5MjUxMWYzZDE0YzE0NGEiLCJlbWFpbCI6IjExMUBnbWFpbC5jb20iLCJuYW1lIjoiamFyZWQiLCJpYXQiOjE2NDQ5MzY5MzR9.dTTeEexRmsn32A6Gf3XeUaqzFqvSLtsoVC4euUJogCU";
+
+    //   axios.get(apiUrl, { headers: { Authorization: token } }).then((data) => {
+    //     console.log(data, "server api test!");
+    //   });
+
+    //   home.value = "HappyDrinker.com";
+    // };
+
+    return { home, logOut };
   },
 };
 </script>
@@ -88,5 +97,9 @@ export default {
   width: 100%;
   background-color: #121212;
   color: white;
+}
+
+.log-out-item {
+  cursor: pointer;
 }
 </style>

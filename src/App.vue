@@ -1,7 +1,7 @@
 <template>
-  <Navbar :userData="savedUser" />
+  <Navbar @changeAuth="authHandler" :userData="savedUser" />
   <div class="main-area">
-    <router-view @changeAuth="authHandler" />
+    <router-view @changeAuth="authHandler" :userData="savedUser" />
   </div>
   <Footer />
 </template>
@@ -21,10 +21,9 @@ export default {
     savedUser.value = userService.get();
     console.log(savedUser);
 
-    // emit事件
+    // emit事件, login/logOut
     let authHandler = function (status, userData) {
-      console.log("get emit ");
-      console.log("event:", status, "data:", userData);
+      // console.log("event:", status, "data:", userData);
       savedUser.value = userData;
     };
 

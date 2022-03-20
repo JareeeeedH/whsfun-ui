@@ -159,7 +159,7 @@ export default {
 .single-view {
   display: flex;
   width: 48%;
-  height: 200px;
+  height: 250px;
   padding: 0.5rem 1rem;
   border-radius: 5px;
   margin: 0 auto 5px 0;

@@ -85,8 +85,8 @@ export default {
     };
 
     // search function
-    let searchContext = ref('ben');
-    let searchPoints = ref(90);
+    let searchContext = ref('dalmore17 sherry');
+    let searchPoints = ref(80);
 
     // 搜尋的內容拆分 title/ subTitle
     let searchContentSplit = computed(()=>{ return searchContext.value.split(' ')})
@@ -174,7 +174,7 @@ export default {
     display: none
   }
   .matched-result{
-    // left:100px;
+    color: white;
     bottom:-50px;
   }
 }  

@@ -8,42 +8,29 @@
             <i class="fa-solid fa-user-plus"></i>
           </label>
           <input type="text" id="name" @input="nameValidate" :value="name" />
-          <span class="input-hint" :class="{ 'invalid-input': !validName }">
-            至少三個字元, 不可特殊符號與空格
-          </span>
+          <span class="input-hint" :class="{ 'invalid-input': !validName }"> 至少三個字元, 不可特殊符號與空格 </span>
         </div>
         <div class="email-wrapper">
           <label for="email"><i class="fa-solid fa-envelope"></i></label>
           <input type="text" id="email" @input="emailValidate" :value="email" />
-          <span class="input-hint" :class="{ 'invalid-input': !validEmail }"
-            >有效的email address</span
-          >
+          <span class="input-hint" :class="{ 'invalid-input': !validEmail }">有效的email address</span>
         </div>
         <div class="password-wrapper">
           <label for="password">
             <i class="fa-solid fa-unlock-keyhole"></i>
           </label>
-          <input
-            type="text"
-            id="password"
-            :password="password"
-            @input="passwordValidate"
-          />
+          <input type="password" id="password" :password="password" @input="passwordValidate" />
         </div>
-        <span class="input-hint" :class="{ 'invalid-input': !validPassword }"
-          >請輸入6-12英文與數字</span
-        >
+        <span class="input-hint" :class="{ 'invalid-input': !validPassword }">請輸入6-12英文與數字</span>
         <div class="password-wrapper">
           <label for="password">
             <i class="fa-solid fa-unlock-keyhole"></i>
           </label>
-          <input type="text" id="password" v-model="passwordAgain" />
+          <input type="password" id="password" v-model="passwordAgain" />
         </div>
         <span class="input-hint">確認密碼</span>
         <div class="button">
-          <button type="button" class="submit-btn" @click="submitRegister">
-            OK
-          </button>
+          <button type="button" class="submit-btn" @click="submitRegister">OK</button>
         </div>
       </div>
     </div>
@@ -68,7 +55,7 @@ export default {
     // router
     let router = useRouter();
 
-    let name = ref("holema");
+    let name = ref("");
     let email = ref("");
     let password = ref("");
     let passwordAgain = ref("");
@@ -93,11 +80,7 @@ export default {
       registerErrorMessage.value = "";
       successMessage.value = "";
 
-      let confirmList = [
-        validName.value,
-        validEmail.value,
-        validPassword.value,
-      ];
+      let confirmList = [validName.value, validEmail.value, validPassword.value];
 
       let checkAllInput = confirmList.every((item) => item == true);
       let passwordConfirm = password.value == passwordAgain.value;
@@ -122,8 +105,15 @@ export default {
         email: email.value,
         password: password.value,
       };
+
+      // local
+      // let apiUrl = "http://localhost:3000/api/member/register";
+
+      // server apiUrl
+      let apiUrl = "https://whisky-happy.herokuapp.com/api/member/register";
+
       axios
-        .post("http://localhost:3000/api/member/register", { newDrinker })
+        .post(apiUrl, { newDrinker })
         .then((response) => {
           // 註冊成功, 導頁
           if (response.data.message === "ok") {
@@ -175,11 +165,7 @@ export default {
       let accountRegex = /^[A-Za-z0-9]+$/;
       let contentValidate = accountRegex.test(inputPassword);
       // 4 - 12 位, AZ/az/0-9
-      if (
-        inputPassword.length < 6 ||
-        inputPassword.length > 12 ||
-        !contentValidate
-      ) {
+      if (inputPassword.length < 6 || inputPassword.length > 12 || !contentValidate) {
         validPassword.value = false;
         return;
       }
@@ -224,7 +210,7 @@ export default {
 }
 .form-wrapper {
   position: absolute;
-  width: 50%;
+  width: 90%;
   left: 50%;
   bottom: 20%;
   transform: translate(-50%, -10%);
@@ -237,7 +223,7 @@ export default {
 .form {
   display: flex;
   flex-direction: column;
-  width: 500px;
+  width: 550px;
 
   .email-wrapper,
   .password-wrapper,

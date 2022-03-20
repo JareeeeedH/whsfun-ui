@@ -11,12 +11,10 @@
           <label for="password">
             <i class="fa-solid fa-unlock-keyhole"></i>
           </label>
-          <input type="text" id="password" v-model="password" />
+          <input type="password" id="password" v-model="password" />
         </div>
         <div class="button">
-          <button type="button" class="submit-btn" @click="submitRegister">
-            Submit
-          </button>
+          <button type="button" class="submit-btn" @click="submitRegister">Submit</button>
           <router-link class="sign-up" to="/register">
             Sign up now
             <i class="fa-solid fa-arrow-right"></i>
@@ -46,20 +44,27 @@ export default {
   name: "register",
   emit: ["changeAuth"],
   setup(props, context) {
-    let email = ref("jayChou@gmail.com");
-    let password = ref("jayChou");
+    let email = ref("");
+    let password = ref("");
     let loginErrorMessage = ref("");
     let successLoginMessage = ref("");
 
     let router = useRouter();
 
     const submitRegister = () => {
+      // local apiUrl
+      // let LoginApi = "http://localhost:3000/api/member/login";
+
+      // server apiUrl
+      let loginApi = "https://whisky-happy.herokuapp.com/api/member/login";
+
       const drinker = {
         email: email.value,
         password: password.value,
       };
+
       axios
-        .post("http://localhost:3000/api/member/login", { drinker })
+        .post(loginApi, { drinker })
         .then((response) => {
           // console.log(response);
 
@@ -77,7 +82,7 @@ export default {
             context.emit("changeAuth", "login", userData);
 
             setTimeout(() => {
-              router.push("/");
+              router.push("/view");
             }, 2000);
             return;
           }
@@ -87,8 +92,6 @@ export default {
         .catch((err) => {
           loginErrorMessage.value = "登入失敗";
           console.warn(err);
-          // console.log(err.response);
-          // console.log("error");
         });
     };
 
@@ -104,13 +107,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-// .img-bgc {
-//   background-color: rgb(54, 44, 44);
-//   width: 100%;
-//   height: 100vh;
-// }
-// linear-gradient(rgba(0, 0, 255, 0.5), rgba(255, 255, 0, 0.5))
-
 .login-text {
   text-align: center;
   color: white;

@@ -8,54 +8,45 @@
       <h5>{{ subTitle }}</h5>
     </div>
   </div>
-  <div class="write-review" v-if="userData">
-    <button @click="toggleForm">
+
+  <!-- error Message -->
+  <div class="alert alert-danger" role="alert" v-show="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <!-- 如果是沒有評論, 就會有要顯示hint內容, 這邊就不用顯示 -->
+  <div class="write-review" v-if="!displayNoReviewsHint">
+    <!-- 有userData進來 -->
+    <button v-if="userData" @click="toggleForm">
       WRITE
       <i class="fa-solid fa-comments"></i>
     </button>
+    <router-link v-if="!userData" class="login-up write-btn" to="/login"
+      >login to write review<i class="fa-solid fa-arrow-right"></i
+    ></router-link>
   </div>
 
   <!-- form表單 -->
   <div class="form-wrapper" :class="{ active: displayForm }">
     <div class="form">
-      <h5>Write down my Review and Rating for:</h5>
+      <!-- <h5>Write down my Review and Rating for:</h5> -->
       <!-- 名稱 -->
       <!-- 如果是有從評論區傳過來的, 名字附上並且給 disabled -->
-      <input
-        :disabled="mainTitle"
-        type="text"
-        id="title"
-        placeholder="Ardbeg 10"
-        v-model="title"
-      />
+      <input :disabled="mainTitle" type="text" id="title" placeholder="Ardbeg 10" v-model="title" />
       <!-- 分數 -->
-      <input
-        type="range"
-        min="0"
-        max="100"
-        step="1"
-        id="points"
-        v-model="points"
-      />Rating: {{ points }}
+      <input type="range" min="0" max="100" step="1" id="points" v-model="points" />Rating:
+      {{ points }}
       <!-- <label for="points">Rating: {{ points }}</label> -->
       <label for="message">Write down your feeling?</label>
       <!-- 評論 -->
       <textarea type="text" id="message" v-model="message" />
       <!-- 關閉表單 X-->
-      <button type="button" class="button close-form" @click="toggleForm">
-        X
-      </button>
+      <button type="button" class="button close-form" @click="toggleForm">X</button>
       <!-- 打開顯示更多-->
       <button type="button" class="button show-more" @click="toggleDetail">
         <i class="fa-solid fa-circle-info"></i>
       </button>
-      <button
-        type="button"
-        class="button submit-button"
-        @click="submitRegister"
-      >
-        OK
-      </button>
+      <button type="button" class="button submit-button" @click="submitRegister">OK</button>
       <!-- <br /> -->
       <transition name="fade">
         <div class="more-detail" :class="{ 'more-active': displayDetail }">
@@ -77,27 +68,16 @@
   </div>
 
   <!-- 會員的評論 -->
-  <MemberReview
-    v-for="review in searchDataById"
-    :key="review._id"
-    :review="review"
-  />
+  <MemberReview v-for="review in searchDataById" :key="review._id" :review="review" />
 
   <!-- 如果沒有評論 -->
   <div class="no-reviews" v-if="displayNoReviewsHint">
     <p class="no-reviews-msg">There is no others review yet.</p>
     <!-- 寫 or login 二擇一 -->
-    <button class="write-btn" v-if="userData" @click="toggleForm">
-      Write my review
-    </button>
+    <button class="write-btn" v-if="userData" @click="toggleForm">Write my review</button>
     <router-link v-else class="login-up write-btn" to="/login"
-      >login to write<i class="fa-solid fa-arrow-right"></i
+      >login to write review<i class="fa-solid fa-arrow-right"></i
     ></router-link>
-  </div>
-
-  <!-- error Message -->
-  <div class="alert alert-danger" role="alert" v-show="errorMessage">
-    {{ errorMessage }}
   </div>
 </template>
 
@@ -105,6 +85,7 @@
 import { ref } from "@vue/reactivity";
 import messageService from "../api-service/message-service";
 import MemberReview from "../components/MemberReview.vue";
+import { useRouter } from "vue-router";
 
 export default {
   name: "register",
@@ -119,28 +100,43 @@ export default {
     let finish = ref("");
     let displayNoReviewsHint = ref(false); //有丟props進來, 並且資料庫沒資料, 才要顯示
 
+    // 禁止連點
+    let disabledSubmit = ref(false);
+
     let errorMessage = ref(null);
 
     const searchDataById = ref([]);
-    // 有props進來, props就是whisky fun的資料內容
+
+    const router = useRouter();
+    // 如果不是從評論有丟whiskyFun資料進來, 避免畫面空白, 先導至view頁面
+    if (!props.mainTitle) {
+      router.push("/view");
+    }
+
+    // props有whiskyFun的資料進來, whiskyFunId打api, DB找有這個id的評論
     if (props.mainTitle) {
       title.value = JSON.stringify(props.mainTitle);
 
-      // funId打api資料庫撈資料庫也有這筆這筆id的評論
-      messageService
-        .getById(props.userData.token, props.id)
-        .then((foundData) => {
-          searchDataById.value = foundData.data.data.reverse();
-          console.log("searchDataById", searchDataById);
+      // #####如果沒登入進來, 這邊userData.token 是 undefined, 先暫時不處理, 也許以後改成看評論都要驗證
+      messageService.getById(props.userData.token, props.id).then((foundData) => {
+        searchDataById.value = foundData.data.data.reverse();
+        // console.log("searchDataById", searchDataById);
 
-          if (searchDataById.value.length === 0) {
-            displayNoReviewsHint.value = true;
-          }
-        });
+        if (searchDataById.value.length === 0) {
+          displayNoReviewsHint.value = true;
+        }
+      });
     }
 
     // 提交評論
     const submitRegister = () => {
+      // 暫時用一個簡陋方式禁制連點, 自行打開modal之後, 再開放可以點擊
+      if (disabledSubmit.value) {
+        console.log("...");
+        return;
+      }
+      disabledSubmit.value = true;
+
       const post = {
         title: title.value,
         content: message.value,
@@ -166,9 +162,17 @@ export default {
 
           // 關閉 沒有任何評論的提示
           displayNoReviewsHint.value = false;
+
+          // 清空
+          nose.value = "";
+          taste.value = "";
+          finish.value = "";
         })
         .catch((err) => {
           // 目前我想到的兩種 error
+
+          console.log(err.response);
+
           // 如果err是DB驗證不通過
           if (err.response.data.err) {
             let errorMsg = err.response.data.err.message;
@@ -190,6 +194,9 @@ export default {
     let toggleForm = function () {
       console.log(displayForm.value);
       displayForm.value = !displayForm.value;
+
+      // 開放form點擊
+      disabledSubmit.value = false;
     };
     // more detail..
     let displayDetail = ref(false);
@@ -206,6 +213,7 @@ export default {
       finish,
       errorMessage,
       submitRegister,
+      disabledSubmit,
       toggleDetail,
       toggleForm,
       displayDetail,
@@ -223,13 +231,13 @@ export default {
   display: flex;
   width: 100%;
   padding: 1rem 3rem;
-  border: 2px solid black;
+  // border-bottom: 2px solid black;
 
   .img-wrapper {
     width: 20%;
     // border: 2px solid red;
     img {
-      width: 50%;
+      width: 60%;
       margin: auto;
       display: block;
     }
@@ -258,9 +266,9 @@ export default {
   display: flex;
   position: absolute;
   border-radius: 10px;
-  width: 50vw;
+  width: 60vw;
   padding: 1rem;
-  top: 70px;
+  top: -250px;
   background: linear-gradient(45deg, $amber-color, $amber-color, #121212);
   box-shadow: 0 0 0px 5px rgba($color: #121212, $alpha: 0.7);
   left: 50%;
@@ -270,6 +278,7 @@ export default {
 
 .active {
   opacity: 1;
+  top: 70px;
 }
 
 .form {
@@ -291,20 +300,19 @@ export default {
   .submit-button {
     position: relative;
     left: 80%;
-    width: 50px;
+    width: 60px;
     height: 30px;
     border: none;
-    // background-color: rgb(0, 0, 0);
-    color: #121212;
+    background-color: rgba($color: #121212, $alpha: 0.7);
+    color: #ffffff;
     border-radius: 5px;
     &:hover {
       color: rgb(255, 255, 255);
-      background-color: green;
+      background-color: rgb(13, 95, 13);
       // border: 1px solid $amber-color;
     }
   }
 
-  .show-more,
   .close-form {
     width: 30px;
     height: 30px;
@@ -315,7 +323,14 @@ export default {
     background-color: transparent;
   }
   .show-more {
-    right: 50px;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    border-radius: 5px;
+    background-color: rgba($color: #121212, $alpha: 0.7);
+  }
+  .show-more {
+    // right: 50px;
     &:hover {
       background-color: $amber-color;
     }
@@ -352,26 +367,52 @@ export default {
   .no-reviews-msg {
     font-size: 2rem;
   }
+}
 
-  .write-btn {
-    border: none;
-    padding: 5px;
-    border: 1px solid $amber-color;
-    border-radius: 3px;
-    background-color: transparent;
+.write-btn {
+  border: none;
+  padding: 5px;
+  border: 1px solid $amber-color;
+  border-radius: 3px;
+  background-color: transparent;
 
-    &:hover {
-      background-color: $amber-color;
-      color: white;
-    }
-  }
-
-  .login-up {
-    text-decoration: none;
+  &:hover {
+    background-color: $amber-color;
+    color: white;
   }
 }
 
-@media screen and (max-width: 1024px) {
+.login-up {
+  text-decoration: none;
+}
+
+// @media screen and (max-width: 1024px) {
+//   .form-wrapper {
+//     width: 85vw;
+//   }
+// }
+
+@media screen and (max-width: 768px) {
+  .main-message {
+    flex-direction: column;
+    padding: 1rem;
+
+    .img-wrapper {
+      width: 100%;
+      img {
+        width: 20%;
+        // margin: auto;
+        // display: block;
+      }
+    }
+    .info-area {
+      width: 100%;
+      // line-height: 100px;
+      // margin: auto;
+      // border: 2px solid black;
+    }
+  }
+
   .form-wrapper {
     width: 85vw;
   }

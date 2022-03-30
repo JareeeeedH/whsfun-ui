@@ -114,7 +114,7 @@ export default {
 .login-page {
   position: relative;
   width: 100vw;
-  height: 85vh;
+  height: 82vh;
   background: url("../imgs/islay.jpg");
   opacity: 0.8;
   background-position: center center;

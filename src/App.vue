@@ -58,6 +58,6 @@ h6 {
   margin: 0;
 }
 .main-area {
-  min-height: calc(85vh);
+  min-height: calc(82vh);
 }
 </style>

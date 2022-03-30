@@ -15,7 +15,7 @@
       <div class="zh-tw">
         <p>
           這個網站是讓你可以更加方便搜尋到<span class="fun-test">Whiskyfun.com</span>的威士忌評論。請前往
-          <router-link to="/view">View</router-link>頁面使用搜尋功能。 也希望你可以留下你的評論與分享,
+          <router-link to="/view">View</router-link> 頁面使用搜尋功能。 也希望你可以留下你的評論與分享,
           讓我們可以與全世界的威士忌愛好者一同分享更多資訊。 這個網站不使用於商業用途,
           目標是想要打造一個威士忌愛好者可以一起同樂分享訊息的環境。
         </p>
@@ -28,6 +28,7 @@
 .home {
   padding: 1rem;
   height: 82vh;
+  background: linear-gradient(120deg, #ffffff,#d6d6d6, #ffbf00, #121212);
 }
 
 .home-message {

@@ -1,6 +1,6 @@
 <template>
   <div class="footer">
-    <span>HappyDrinker</span>
+    <span>HappyDrinker|威你好</span>
     <br />
     <span>Email:happydrinker888999@gmail.com</span>
   </div>

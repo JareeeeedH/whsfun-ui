@@ -85,7 +85,7 @@ export default {
     };
 
     // search function
-    let searchContext = ref('dalmore17 sherry');
+    let searchContext = ref('macallan');
     let searchPoints = ref(80);
 
     // 搜尋的內容拆分 title/ subTitle
@@ -174,8 +174,10 @@ export default {
     display: none
   }
   .matched-result{
-    color: white;
-    bottom:-50px;
+    // color: rgb(0, 0, 0);
+    bottom: -10px;
+    right: 0;
+    font-size: 1.25rem;;
   }
 }  
 

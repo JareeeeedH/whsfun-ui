@@ -1,6 +1,7 @@
 <template>
-  <h3>最新的評論：</h3>
   <div class="wrapper">
+    <h3>最新的評論：</h3>
+    <hr>
     <div class="review" v-for="post in allMessage" :key="post">
       <h3>
         {{ post.speaker.name }}
@@ -40,10 +41,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+.wrapper{
+  padding: 1rem;
+  background: linear-gradient(120deg, #d6d6d6, #ffbf00, #121212);
+}
 .review {
   padding: 1rem;
   margin: 2px 0px;
-  background: linear-gradient(90deg, #d6d6d6, #ffbf00, #121212);
+  border-bottom: 1px solid black;
+  // background: linear-gradient(90deg, #d6d6d6, #ffbf00, #121212);
 }
 
 .msg-time {

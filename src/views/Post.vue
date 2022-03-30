@@ -39,7 +39,7 @@
       <!-- <label for="points">Rating: {{ points }}</label> -->
       <label for="message">Write down your feeling?</label>
       <!-- 評論 -->
-      <textarea type="text" id="message" v-model="message" />
+      <textarea type="text" id="message" v-model="message" placeholder="please write down your feeling, 請寫下您的評論" />
       <!-- 關閉表單 X-->
       <button type="button" class="button close-form" @click="toggleForm">X</button>
       <!-- 打開顯示更多-->
@@ -52,15 +52,15 @@
         <div class="more-detail" :class="{ 'more-active': displayDetail }">
           <div class="nose">
             <h5>Nose</h5>
-            <textarea cols="50" rows="3" v-model="nose"></textarea>
+            <textarea cols="50" rows="3" v-model="nose" placeholder='香氣'></textarea>
           </div>
           <div class="Taste">
             <h5>Taste</h5>
-            <textarea cols="50" rows="3" v-model="taste"></textarea>
+            <textarea cols="50" rows="3" v-model="taste" placeholder='味覺'></textarea>
           </div>
           <div class="Finish">
             <h5>Finish</h5>
-            <textarea cols="50" rows="3" v-model="finish"></textarea>
+            <textarea cols="50" rows="3" v-model="finish" placeholder='尾韻'></textarea>
           </div>
         </div>
       </transition>
@@ -93,8 +93,8 @@ export default {
   components: { MemberReview },
   setup(props) {
     let title = ref("");
-    let message = ref("good, i like Peated !");
-    let points = ref(86);
+    let message = ref("");
+    let points = ref(0);
     let nose = ref("");
     let taste = ref("");
     let finish = ref("");

@@ -7,11 +7,13 @@
         {{ post.speaker.name }}
         <span class="msg-time"> | {{ post.date }}</span>
       </h3>
+      <br>
       <h3>
         {{ post.title }}
         <span class="scores"> | scores: {{ post.points }}</span>
       </h3>
       <h5>Note : {{ post.content }}</h5>
+      <br>
       <p v-if="post.nose">&nbsp;&nbsp;&nbsp; Nose:{{ post.nose }}</p>
       <p v-if="post.taste">&nbsp;&nbsp;&nbsp; Taste{{ post.taste }}</p>
       <p v-if="post.finish">&nbsp;&nbsp;&nbsp; Finish{{ post.finish }}</p>

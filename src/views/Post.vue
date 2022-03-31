@@ -52,15 +52,15 @@
         <div class="more-detail" :class="{ 'more-active': displayDetail }">
           <div class="nose">
             <h5>Nose</h5>
-            <textarea cols="50" rows="3" v-model="nose" placeholder='香氣'></textarea>
+            <textarea cols="50" rows="3" v-model="nose" placeholder="香氣"></textarea>
           </div>
           <div class="Taste">
             <h5>Taste</h5>
-            <textarea cols="50" rows="3" v-model="taste" placeholder='味覺'></textarea>
+            <textarea cols="50" rows="3" v-model="taste" placeholder="味覺"></textarea>
           </div>
           <div class="Finish">
             <h5>Finish</h5>
-            <textarea cols="50" rows="3" v-model="finish" placeholder='尾韻'></textarea>
+            <textarea cols="50" rows="3" v-model="finish" placeholder="尾韻"></textarea>
           </div>
         </div>
       </transition>

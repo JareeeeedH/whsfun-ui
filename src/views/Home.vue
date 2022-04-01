@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1 class="home-title">Have fun with Whisky!</h1>
+    <h1 class="home-title">Have fun with Whisky!!</h1>
     <br />
     <div class="home-message">
       <div class="eng">
